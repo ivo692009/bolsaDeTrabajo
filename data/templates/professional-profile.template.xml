@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copiar por perfil. El teléfono se obtiene del remitente WhatsApp autenticado. -->
+<professional id="professional-id" status="draft" availabilityStatus="inactive">
+  <firstName required="true">Nombre</firstName>
+  <lastName required="true">Apellido</lastName>
+  <whatsappPhone e164="" source="inbound_whatsapp_sender" verifiedAt="" unique="true" changeRequiresReview="true" />
+  <socialLinks required="true" />
+  <serviceCategories required="true">
+    <serviceCategory id="category-id">
+      <jobTypes>
+        <jobType id="job-type-id" />
+      </jobTypes>
+    </serviceCategory>
+  </serviceCategories>
+  <serviceAreas required="true">
+    <area id="configured-area-id" active="true" />
+  </serviceAreas>
+  <availability required="true" timezone="America/Argentina/Buenos_Aires">
+    <slot day="lunes" start="09:00" end="17:00" timezone="America/Argentina/Buenos_Aires" />
+  </availability>
+  <profileChangeHistory />
+</professional>

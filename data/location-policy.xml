@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locationPolicy provider="google_maps_geocoding_api" countryCode="AR" timezone="America/Argentina/Buenos_Aires" status="pending_boundary_configuration" updatedAt="">
+  <distanceRanking method="haversine_between_area_reference_points" status="pending_reference_points" precisionKm="1" />
+  <serviceAreas>
+    <area id="rawson" active="true">
+      <name>Rawson</name>
+      <aliases>
+        <alias>Rawson, Chubut</alias>
+      </aliases>
+      <boundary source="official_boundary_dataset" status="pending" />
+      <representativePoint latitude="" longitude="" source="official_area_centroid" status="pending" />
+    </area>
+    <area id="playa-union" active="true">
+      <name>Playa Unión</name>
+      <aliases>
+        <alias>Playa Union</alias>
+      </aliases>
+      <boundary source="official_boundary_dataset" status="pending" />
+      <representativePoint latitude="" longitude="" source="official_area_centroid" status="pending" />
+    </area>
+  </serviceAreas>
+  <storagePolicy>
+    <retainRawGeocodingResponse>false</retainRawGeocodingResponse>
+    <retainPreciseCoordinates>false</retainPreciseCoordinates>
+    <retainNormalizedAddress>pending_configuration</retainNormalizedAddress>
+  </storagePolicy>
+</locationPolicy>

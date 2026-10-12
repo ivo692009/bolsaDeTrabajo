@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- El administrador configura el poligono oficial y el centroide; el profesional declara solo IDs de zonas que cubre. -->
+<area id="zona-slug-unico" active="true">
+  <name>Nombre de la zona de servicio</name>
+  <aliases>
+    <alias>Nombre alternativo de la zona</alias>
+  </aliases>
+  <boundary source="official_boundary_dataset" status="pending">
+    <vertex latitude="" longitude="" />
+    <vertex latitude="" longitude="" />
+    <vertex latitude="" longitude="" />
+  </boundary>
+  <representativePoint latitude="" longitude="" source="official_area_centroid" status="pending" />
+</area>

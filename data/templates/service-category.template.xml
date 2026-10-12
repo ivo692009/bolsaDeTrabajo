@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copiar este bloque category por cada rubro; repetir alias y jobType según sea necesario. -->
+<category id="rubro-slug-unico" active="true">
+  <name>Nombre visible del rubro</name>
+  <description>Descripción general del rubro.</description>
+  <aliases>
+    <alias>Sinónimo o variación del nombre</alias>
+    <alias>Otra forma de pedir este servicio</alias>
+  </aliases>
+  <jobTypes>
+    <jobType id="tipo-trabajo-slug-unico">
+      <name>Nombre del tipo de trabajo</name>
+      <description>Descripción o alcance de este tipo de trabajo.</description>
+      <aliases>
+        <alias>Variación o sinónimo del trabajo</alias>
+        <alias>Otra descripción usada por clientes</alias>
+      </aliases>
+    </jobType>
+  </jobTypes>
+</category>

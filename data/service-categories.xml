@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceCatalog updatedAt="">
+  <category id="albanileria" active="true">
+    <name>Albañilería</name>
+    <description>Construcción, remodelación y reparación de obra civil.</description>
+    <aliases>
+      <alias>Albañil</alias>
+      <alias>Construcción</alias>
+      <alias>Obra</alias>
+    </aliases>
+    <jobTypes>
+      <jobType id="obra-menor">
+        <name>Obra menor</name>
+        <description>Trabajos pequeños de construcción o reparación.</description>
+        <aliases><alias>Arreglos de obra</alias></aliases>
+      </jobType>
+      <jobType id="reparaciones">
+        <name>Reparaciones de muros y superficies</name>
+        <description>Resane, reparación y acabado de muros.</description>
+        <aliases><alias>Resanar pared</alias><alias>Reparar muro</alias></aliases>
+      </jobType>
+      <jobType id="remodelacion">
+        <name>Remodelación</name>
+        <description>Modificación o renovación de espacios existentes.</description>
+        <aliases><alias>Remodelar</alias><alias>Renovar ambiente</alias></aliases>
+      </jobType>
+    </jobTypes>
+  </category>
+  <category id="electricidad" active="true">
+    <name>Electricidad</name>
+    <description>Instalación, mantenimiento y reparación eléctrica.</description>
+    <aliases><alias>Electricista</alias><alias>Servicio eléctrico</alias></aliases>
+    <jobTypes>
+      <jobType id="instalaciones">
+        <name>Instalaciones eléctricas</name>
+        <description>Instalación de cableado, tomas y luminarias.</description>
+        <aliases><alias>Instalar cableado</alias><alias>Instalar luminaria</alias></aliases>
+      </jobType>
+      <jobType id="reparaciones">
+        <name>Reparaciones eléctricas</name>
+        <description>Diagnóstico y reparación de fallas eléctricas.</description>
+        <aliases><alias>Falla eléctrica</alias><alias>Reparar toma</alias></aliases>
+      </jobType>
+      <jobType id="mantenimiento">
+        <name>Mantenimiento eléctrico</name>
+        <description>Revisión preventiva de instalaciones eléctricas.</description>
+        <aliases><alias>Revisión eléctrica</alias></aliases>
+      </jobType>
+    </jobTypes>
+  </category>
+  <category id="agua" active="true">
+    <name>Agua y plomería</name>
+    <description>Instalación y reparación de tuberías y elementos de agua.</description>
+    <aliases><alias>Plomería</alias><alias>Fontanería</alias><alias>Plomero</alias><alias>Fontanero</alias></aliases>
+    <jobTypes>
+      <jobType id="instalaciones">
+        <name>Instalaciones de agua</name>
+        <description>Instalación de tuberías, grifos y accesorios.</description>
+        <aliases><alias>Instalar tubería</alias><alias>Instalar grifo</alias></aliases>
+      </jobType>
+      <jobType id="fugas">
+        <name>Detección y reparación de fugas</name>
+        <description>Localización y reparación de fugas de agua.</description>
+        <aliases><alias>Fuga de agua</alias><alias>Filtración</alias></aliases>
+      </jobType>
+      <jobType id="reparaciones">
+        <name>Reparaciones de plomería</name>
+        <description>Reparación de tuberías y accesorios de agua.</description>
+        <aliases><alias>Destapar tubería</alias><alias>Reparar cañería</alias></aliases>
+      </jobType>
+    </jobTypes>
+  </category>
+  <category id="gas" active="true">
+    <name>Gas</name>
+    <description>Instalación, mantenimiento y reparación de instalaciones de gas.</description>
+    <aliases><alias>Gasista</alias><alias>Instalación de gas</alias></aliases>
+    <jobTypes>
+      <jobType id="instalaciones">
+        <name>Instalaciones de gas</name>
+        <description>Instalación de tuberías y equipos de gas.</description>
+        <aliases><alias>Instalar tubería de gas</alias></aliases>
+      </jobType>
+      <jobType id="reparaciones">
+        <name>Reparaciones de gas</name>
+        <description>Diagnóstico y reparación de instalaciones de gas.</description>
+        <aliases><alias>Fuga de gas</alias><alias>Reparar instalación de gas</alias></aliases>
+      </jobType>
+      <jobType id="mantenimiento">
+        <name>Mantenimiento de instalaciones de gas</name>
+        <description>Revisión preventiva de instalaciones y equipos.</description>
+        <aliases><alias>Revisión de gas</alias></aliases>
+      </jobType>
+    </jobTypes>
+  </category>
+</serviceCatalog>

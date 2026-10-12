@@ -1,0 +1,432 @@
+project:
+  name: "Plataforma de intermediacion de servicios"
+  domain: "Conectar clientes con profesionales de oficios y servicios"
+  version: "1.0.0"
+  owner: "Responsable del proyecto"
+
+architecture:
+  communication_channel: "API oficial de Meta para WhatsApp"
+  runtime: "Windows PowerShell 5.1"
+  webhook_script: "scripts/whatsapp-bot.ps1"
+  webhook_path: "/webhook"
+  webhook_listener_bind: "127.0.0.1"
+  webhook_public_tls_termination: "reverse_proxy_or_managed_tunnel"
+  response_engine: "deterministic_rules_and_local_xml"
+  llm_provider: null
+  internal_geocoding_provider: "Google Maps Geocoding API"
+  user_and_professional_storage: "Archivos XML locales"
+  multimedia_storage: "Directorio local con referencias desde XML"
+  commission_evidence_storage: "Directorio local privado separado de gallery"
+  service_category_catalog: "data/service-categories.xml"
+  service_category_template: "data/templates/service-category.template.xml"
+  service_area_template: "data/templates/service-area.template.xml"
+  professional_profile_template: "data/templates/professional-profile.template.xml"
+  location_policy: "data/location-policy.xml"
+  admin_allowlist: "data/admin-whatsapp-numbers.xml"
+  runtime_data_templates:
+    professionals: "data/templates/professionals.template.xml"
+    requests: "data/templates/requests.template.xml"
+    admin_allowlist: "data/templates/admin-whatsapp-numbers.template.xml"
+  runtime_data_gitignored: true
+  initial_service_areas: ["Rawson, Chubut", "Playa Unión, Chubut"]
+  professional_credentials_verified_in_mvp: false
+  emergency_services_supported: false
+  city: "Rawson, Chubut"
+  included_localities: ["Playa Unión, Chubut"]
+  boundary_status: "pending_official_polygon"
+  distance_ranking: "haversine_between_configured_area_reference_points"
+  distance_ranking_status: "pending_reference_points"
+  distance_is_approximate_straight_line: true
+  geocoding_api_key_env: "GOOGLE_MAPS_API_KEY"
+  new_requests_enabled: false
+
+media_intake:
+  validate_actual_file_type: true
+  max_file_size_bytes: null
+  allowed_image_types: []
+  generate_internal_filename: true
+  calculate_sha256: true
+  reject_unvalidated_files: true
+
+offer_routing:
+  require_unique_request_code: true
+  response_must_include_code: true
+  require_matching_professional_sender: true
+  accept_reply_without_code: false
+
+storage:
+  writer_mode: "single_instance_serialized_queue"
+  validate_xml_before_replace: true
+  replace_from_temporary_file_atomically: true
+  backups_enabled: true
+  backup_frequency: "daily"
+  backup_retention_count: 90
+
+webhook_processing:
+  deduplicate_by: "meta_message_id"
+  deduplication_store: "data/webhook-events/<year>.xml"
+  state_transitions_idempotent: true
+  validate_hmac_sha256: true
+  maximum_body_bytes: 1048576
+  retention: "permanent"
+  archive_partition: "calendar_year"
+
+administrator_access:
+  authentication: "enabled_sender_in_data/admin-whatsapp-numbers.xml_with_matching_role"
+  self_enrollment: false
+
+roles:
+  client:
+    can: ["request_service", "select_professional", "confirm_labor_subtotal", "confirm_completion_or_cancellation", "submit_review"]
+  professional:
+    can: ["manage_own_profile", "add_or_modify_own_capabilities", "pause_or_reactivate_own_profile", "accept_or_reject_request", "confirm_labor_subtotal", "confirm_completion_or_cancellation", "submit_commission_proof"]
+    cannot: ["change_linked_phone_without_review", "delete_profile_data_or_history", "edit_global_service_catalog"]
+  assistant_bot:
+    can: ["query_local_files", "communicate_via_official_whatsapp_api", "record_workflow_states", "classify_message_intent"]
+    cannot: ["invent_business_data", "verify_payment_proof", "confirm_bank_deposit_from_image"]
+  commission_admin:
+    can: ["read_private_commission_proof", "accept_or_reject_commission_proof", "confirm_payment_by_manual_review", "review_phone_change", "review_information_removal", "record_review_decision"]
+  catalog_manager:
+    can: ["add_service_category", "edit_service_category", "deactivate_service_category", "add_job_type"]
+
+professional_identity:
+  identifier_source: "inbound_whatsapp_sender_number"
+  normalization: "E.164"
+  match_rule: "exact_unique_match"
+  max_profiles_per_whatsapp_number: 1
+  max_whatsapp_numbers_per_profile: 1
+  internal_xml_id: "reference_only_not_authentication"
+  phone_change_requires: "authorized_review_and_new_number_verification"
+  role_resolution: "per_message_intent"
+
+operational_parameters:
+  professional_response_timeout_minutes: null
+  follow_up_delay_hours: null
+  initial_follow_up_delay_hours: null
+  completion_check_interval_hours: 24
+  completion_check_retries: 2
+  commission:
+    type: "single_percentage"
+    payer: "professional"
+    rate: 0.05
+    charges_per_completed_job: 1
+    calculation_basis: "confirmed_labor_subtotal_only"
+    currency: "ARS"
+    currency_minor_unit_digits: 0
+    due_event: "client_and_professional_confirm_work_completed"
+    cancellation_result: "no_commission"
+    no_response_result: "closed_unconfirmed_no_commission"
+    disagreement_retry_count: 2
+    disagreement_after_retry: "manual_review_no_commission_until_resolved"
+    rounding_policy: "floor_to_whole_ars_peso"
+    status: "configured"
+    proof_required: true
+    proof_amount_scope: "commission_due_only"
+    proof_storage: "evidence/commission-payments/<request-id>/"
+    proof_verification: "authorized_admin_manual_visual_review"
+    accepted_payment_status: "paid"
+    payment_confirmation_method: "manual_admin_review"
+    bank_deposit_verified_by_image: false
+
+business_rules:
+  - id: "BR-001"
+    title: "Fuente de información verificable"
+    description: "El bot solo informa datos disponibles en los XML locales y archivos de la galería."
+    priority: "critical"
+    when: "El bot responde sobre profesionales, horarios o referencias."
+    then: "Consulta los archivos locales; si un dato no existe o está incompleto, lo indica y no lo inventa."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-002"
+    title: "Acciones según rol"
+    description: "Cliente, Profesional, Bot y Revisor autorizado tienen permisos separados definidos en roles."
+    priority: "critical"
+    when: "Un participante solicita una acción dentro del flujo."
+    then: "Se valida el rol antes de la acción; solo commission_admin puede aceptar o rechazar comprobantes y el Bot nunca decide el pago."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-003"
+    title: "No inventar datos"
+    description: "La IA no genera datos de negocio sin respaldo en los archivos locales."
+    priority: "high"
+    when: "El sistema responde a una consulta con información no confirmada."
+    then: "Debe indicar que no encuentra el dato registrado y solicitar la información necesaria."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-004"
+    title: "Regla de prioridad"
+    description: "En caso de conflicto entre reglas, prevalece la prioridad más alta."
+    priority: "high"
+    when: "Existen múltiples reglas aplicables a la misma operación."
+    then: "Se ejecuta la regla con mayor prioridad y se registra la decisión."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-005"
+    title: "Estados persistidos localmente"
+    description: "Los cambios de estado necesarios para continuar una solicitud se conservan en archivos XML locales."
+    priority: "medium"
+    when: "Se toma una acción con impacto operativo o regulatorio."
+    then: "Se registra el estado y su marca de tiempo en el XML de solicitudes; no se requiere una base de datos externa."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-006"
+    title: "Consentimiento para mensajeria"
+    description: "El contacto por WhatsApp debe respetar el consentimiento y las preferencias de cada persona."
+    priority: "critical"
+    when: "El sistema inicia o continúa una conversación por WhatsApp."
+    then: "Debe verificarse el consentimiento, respetarse las solicitudes de no contacto y usarse una plantilla aprobada cuando las politicas de Meta lo requieran."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-007"
+    title: "Disponibilidad basada en fuente"
+    description: "Solo perfiles publicados, disponibles, con tarea declarada y horario válido pueden aparecer en resultados."
+    priority: "high"
+    when: "Un cliente consulta por profesionales, horarios o días disponibles."
+    then: "Se exige coincidencia de rubro y tipo de trabajo, status active, availabilityStatus active, zona declarada y horario válido; si se indica día/hora, el intervalo debe cubrirlo."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-008"
+    title: "Datos de profesionales y privacidad"
+    description: "El perfil profesional se autentica por un único número de WhatsApp remitente normalizado y único."
+    priority: "critical"
+    when: "Se registra, actualiza o comparte información de un profesional."
+    then: "Se requiere coincidencia exacta y única del número remitente con el XML; un perfil tiene un solo número y un número no puede vincular varios perfiles."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-009"
+    title: "Autorizacion de referencias visuales"
+    description: "Las fotos requieren autorización antes de almacenarse o enviarse a clientes."
+    priority: "high"
+    when: "Se agrega o comparte una foto de trabajos realizados."
+    then: "Se verifica el consentimiento y la relación con el profesional; el XML guarda una referencia al archivo, no la imagen."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-010"
+    title: "Aceptacion previa a la conexion"
+    description: "El cliente y el profesional solo se conectan formalmente cuando el profesional acepta la propuesta."
+    priority: "critical"
+    when: "El cliente selecciona un profesional para una solicitud."
+    then: "Se notifica al profesional y se espera una aceptación registrada antes de compartir datos de contacto o confirmar el trabajo."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-011"
+    title: "Seguimiento y reseña tras el servicio"
+    description: "Cliente y Profesional reciben consultas cada 24 horas con un máximo de dos reintentos para confirmar el resultado del trabajo."
+    priority: "high"
+    when: "Se cumple el plazo de seguimiento configurado para una solicitud aceptada."
+    then: "Solo una confirmación completed de ambas partes habilita reseña y comisión; cancelación bilateral o silencio después de dos reintentos cierra sin comisión y conserva trazabilidad."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-012"
+    title: "Comision unica por trabajo completado"
+    description: "El Profesional paga una sola comisión del 5% sobre la suma confirmada de mano de obra, en pesos argentinos enteros, si ambas partes confirman el trabajo completado."
+    priority: "critical"
+    when: "Cliente y Profesional confirman que el trabajo se completó y existe un subtotal de mano de obra confirmado por ambas partes."
+    then: "Se calcula una única vez 0.05 por el subtotal confirmado de mano de obra, excluyendo materiales y trámites, con redondeo hacia abajo al peso entero. Si ambas partes confirman cancelación, no se cobra."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-013"
+    title: "Canal oficial exclusivo"
+    description: "La comunicación automatizada con clientes y profesionales se realiza exclusivamente por la API oficial de WhatsApp de Meta."
+    priority: "critical"
+    when: "El bot envía o recibe mensajes."
+    then: "No se usan otros canales, bots no oficiales ni enlaces a páginas o aplicaciones externas para completar los flujos."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-014"
+    title: "Rechazo o falta de respuesta"
+    description: "Un profesional puede rechazar una propuesta o no responder dentro del plazo configurado."
+    priority: "high"
+    when: "El profesional rechaza la solicitud o vence el plazo configurado sin respuesta."
+    then: "Se actualiza el estado, se informa al cliente por WhatsApp y se ofrecen otros profesionales del XML. Si el plazo no está configurado, la solicitud permanece pendiente."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-015"
+    title: "Alta de profesionales por WhatsApp"
+    description: "El bot registra nombre, apellido y redes sociales; el número único del perfil se toma del remitente de WhatsApp, y para publicar exige rubro y tipo de trabajo."
+    priority: "high"
+    when: "Una persona inicia el flujo de alta de profesional."
+    then: "Se recopilan nombre, apellido y redes sociales, se vincula el número remitente verificado y se evita duplicar números; antes de publicar, el Profesional selecciona rubros y tipos válidos."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-016"
+    title: "Seguimiento desde solicitud aceptada"
+    description: "El seguimiento pos-servicio se programa después de la aceptación y usa un plazo configurable."
+    priority: "high"
+    when: "El profesional acepta una solicitud."
+    then: "Se programa la consulta al cliente usando el plazo configurado; si el plazo no está definido, no se inventa una fecha de envío."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-017"
+    title: "Rubros y tipos de trabajo explícitos"
+    description: "La capacidad de un Profesional se determina por un catálogo extensible, sin máximo fijo, de rubros, descripciones, alias y tipos de trabajo."
+    priority: "critical"
+    when: "Se registra, publica o busca un perfil profesional."
+    then: "Solo un catalog_manager agrega o modifica rubros mediante data/templates/service-category.template.xml; las referencias se validan contra data/service-categories.xml y la capacidad no se infiere por género."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-018"
+    title: "Comprobante privado y verificado"
+    description: "El Profesional entrega evidencia únicamente por el importe esperado de la comisión y esta se almacena localmente fuera de la galería pública."
+    priority: "critical"
+    when: "El Profesional envía una captura del comprobante de transferencia de comisión."
+    then: "Un Administrador revisa manualmente y registra aceptado, rechazado o inconcluso con método y motivo; la imagen sola nunca acredita conciliación bancaria y reenvíos no crean cargos."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-019"
+    title: "Autogestion autenticada por remitente"
+    description: "Solo el Profesional cuyo número remitente coincide exactamente con su único número vinculado puede consultar y modificar su perfil."
+    priority: "critical"
+    when: "Una persona solicita cambios en un perfil profesional por WhatsApp."
+    then: "Se normaliza el número remitente a E.164, se valida una única coincidencia y se registra el cambio; el ID XML y los datos escritos en el mensaje no autentican."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-020"
+    title: "Cambios propios sin borrado arbitrario"
+    description: "El Profesional puede agregar y modificar sus datos y capacidades propias, pero no borrar perfiles, capacidades ni historial directamente."
+    priority: "high"
+    when: "El Profesional actualiza información o solicita retirar datos."
+    then: "Se conserva historial; una baja requiere revisión autorizada y se implementa como desactivación reversible sin borrado físico."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-021"
+    title: "Rol contextual por intención"
+    description: "Una persona con perfil profesional también puede buscar o contratar servicios como Cliente."
+    priority: "high"
+    when: "Se recibe un mensaje de WhatsApp de un número registrado como Profesional."
+    then: "Se determina el rol por la intención del mensaje actual; una solicitud de servicio inicia el flujo Cliente sin alterar el perfil Profesional."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-022"
+    title: "Pausa y reactivacion voluntaria"
+    description: "El Profesional puede desactivar o reactivar su propio perfil con el mismo número de WhatsApp verificado."
+    priority: "high"
+    when: "El Profesional solicita por WhatsApp dejar de recibir ofertas o volver a aparecer en búsquedas."
+    then: "Se registra estado inactive o active; el perfil inactivo no recibe nuevas ofertas y los trabajos ya aceptados no se cancelan ni se borran."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-023"
+    title: "Confirmacion bilateral de resultado"
+    description: "Cliente y Profesional confirman si cada solicitud terminó completada o cancelada."
+    priority: "critical"
+    when: "Se inicia el seguimiento posservicio."
+    then: "Una cancelación confirmada por ambas partes no genera comisión; un desacuerdo solicita confirmación nuevamente hasta dos veces y luego escala a revisión sin cobrar."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-024"
+    title: "Deduplicacion de webhooks"
+    description: "Los reintentos de webhooks entrantes no deben repetir acciones de negocio."
+    priority: "critical"
+    when: "Se recibe un webhook con un ID de mensaje de Meta ya procesado."
+    then: "Se reconoce el ID persistido y se responde sin crear solicitudes, cambios, ofertas, recordatorios o comisiones duplicadas."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-025"
+    title: "Desactivacion temporal autogestionada"
+    description: "Un Profesional puede pausar y reactivar su perfil desde el número de WhatsApp autenticado."
+    priority: "high"
+    when: "El Profesional solicita cambiar availabilityStatus."
+    then: "Inactive excluye el perfil de búsquedas y ofertas nuevas; las ofertas pendientes vencen en su plazo original y los trabajos aceptados continúan. Active restaura el perfil sin borrar historial."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-026"
+    title: "Escritura XML serializada y respaldada"
+    description: "Una sola instancia escribe XML en cola serializada con validación previa, reemplazo atómico y copias diarias."
+    priority: "critical"
+    when: "El bot modifica datos o estados locales."
+    then: "Se conserva el original ante error y se rotan hasta 90 copias diarias; nunca se confirman cambios que no fueron persistidos correctamente."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-027"
+    title: "Oferta con codigo de correlacion"
+    description: "Cada oferta tiene un código único para asociar aceptar o rechazar a la solicitud correcta."
+    priority: "critical"
+    when: "El Profesional responde a una oferta de trabajo."
+    then: "Solo se procesa si el código corresponde a una oferta pendiente dirigida al número remitente; sin código válido no cambia ninguna solicitud."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-028"
+    title: "Validacion de zona de servicio"
+    description: "Las solicitudes iniciales se limitan a Rawson y Playa Unión y se validan con Google Maps Geocoding API más un polígono oficial local."
+    priority: "critical"
+    when: "Se crea una solicitud de trabajo."
+    then: "Si no hay polígono oficial, geocodificación válida o coincidencia dentro del área, la solicitud queda location_pending y no se asigna."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-029"
+    title: "Administracion por allowlist"
+    description: "Las acciones administrativas por WhatsApp requieren un remitente habilitado localmente con el rol solicitado."
+    priority: "critical"
+    when: "Se solicita revisión de pago, número, datos o catálogo."
+    then: "Se valida coincidencia E.164 y rol en data/admin-whatsapp-numbers.xml; no se permite alta administrativa por chat."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-030"
+    title: "Archivos entrantes validados"
+    description: "Las imágenes se validan por tamaño y contenido real y se separan según su uso."
+    priority: "high"
+    when: "Se recibe una imagen por WhatsApp."
+    then: "Se aplica límite configurado, se detecta tipo real, se genera nombre interno y se guarda en galería o evidencia privada; archivos inválidos se rechazan."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-031"
+    title: "Atencion segura de emergencias"
+    description: "El MVP no coordina emergencias ni brinda diagnósticos técnicos peligrosos."
+    priority: "critical"
+    when: "La solicitud describe riesgo inmediato, como fuga de gas o peligro eléctrico."
+    then: "Se indica contactar servicios de emergencia locales sin inventar números y no se inicia una oferta ordinaria."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-032"
+    title: "Credenciales no verificadas en MVP"
+    description: "El sistema no verifica matrículas, licencias ni certificaciones en esta etapa."
+    priority: "high"
+    when: "El Bot presenta un perfil profesional."
+    then: "No afirma que el Profesional esté certificado o verificado; los datos declarados se presentan como no verificados."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-033"
+    title: "Fallback por cercania sin relajar tarea"
+    description: "Si no hay profesionales adecuados en la zona pedida, se pueden listar alternativas activas y disponibles que declaran el mismo tipo de trabajo, ordenadas por proximidad de zonas."
+    priority: "high"
+    when: "La búsqueda exacta por trabajo no encuentra perfiles en la zona del Cliente."
+    then: "Se conservan los filtros de estado, disponibilidad, tarea y horario; se ordena por distancia aproximada entre puntos oficiales de zonas declaradas. Si faltan ubicación o puntos configurados, no se afirma cercanía."
+    exceptions: []
+    status: "draft"
+
+metadata:
+  last_updated: "2026-10-12"
+  owner: "Equipo de producto"
+  notes: "system-specification.md es la fuente de verdad funcional. El webhook inicial usa PowerShell 5.1 y respuestas deterministas. Configurar credenciales Meta, polígono oficial, allowlist admin, límites de medios, plazo inicial y expiración de ofertas. Backups locales diarios con 90 copias; pérdida física del servidor sigue siendo riesgo del MVP."

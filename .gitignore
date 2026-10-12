@@ -1,0 +1,18 @@
+# Local secrets and environment files
+.env
+.env.*
+!scripts/whatsapp-bot.env.example
+
+# Runtime records can contain phone numbers, addresses, payment status, or Meta IDs
+data/professionals.xml
+data/requests.xml
+data/admin-whatsapp-numbers.xml
+data/webhook-events/*.xml
+
+# Private local media and operational files
+gallery/*
+!gallery/README.md
+evidence/commission-payments/*
+!evidence/commission-payments/README.md
+backups/
+logs/

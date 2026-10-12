@@ -1,0 +1,63 @@
+skill:
+  id: "skill_template"
+  version: "1.0.0"
+  name: "Nombre de la skill"
+  owner: "Equipo o persona responsable"
+  status: "draft"
+  description: "Descripción breve de la finalidad de la skill."
+  purpose: "Qué problema resuelve y para qué tipo de usuario."
+
+  trigger:
+    type: "manual"
+    conditions:
+      - "Se activa cuando el usuario solicita una acción específica."
+      - "También puede dispararse por evento o llamada externa."
+
+  inputs:
+    - name: "usuario"
+      type: "string"
+      required: true
+      description: "Identificación del usuario o contexto de la consulta."
+    - name: "solicitud"
+      type: "string"
+      required: true
+      description: "Texto o instrucción recibida por el usuario."
+    - name: "contexto"
+      type: "object"
+      required: false
+      description: "Información adicional del negocio o del sistema."
+
+  outputs:
+    - name: "respuesta"
+      type: "string"
+      description: "Respuesta final para el usuario."
+    - name: "acciones"
+      type: "array"
+      description: "Lista de pasos o decisiones sugeridas."
+
+  instructions:
+    - "Actúa con claridad, precisión y coherencia con el negocio."
+    - "No inventes datos que no estén disponibles en el contexto."
+    - "Si faltan datos clave, solicita la información necesaria antes de responder."
+    - "Respeta el tono y la política de la organización."
+
+  guardrails:
+    - "No compartas información sensible sin autorización."
+    - "No des recomendaciones fuera del alcance del proyecto."
+    - "No asumas decisiones sin validar los datos disponibles."
+
+  examples:
+    - input:
+        usuario: "cliente_001"
+        solicitud: "Necesito saber el estado de mi solicitud."
+      output:
+        respuesta: "Puedes revisar tu solicitud en el portal con el número X."
+        acciones:
+          - "Consultar historial"
+          - "Mostrar estado actual"
+
+  evaluation:
+    success_criteria:
+      - "La respuesta es útil y clara para el usuario."
+      - "La salida cumple con reglas y restricciones del negocio."
+      - "Se solicita información faltante cuando es necesario."
