@@ -7,7 +7,7 @@ Validar que una dirección escrita por cliente o profesional corresponda al áre
 - Usar Google Maps Geocoding API desde el servidor para normalizar la dirección y obtener país, localidad y coordenadas.
 - La API se usa solo para validación interna; WhatsApp sigue siendo el único canal de conversación y no se envían enlaces de Google Maps al usuario.
 - Mantener la clave de Google en configuración secreta del servidor, nunca en XML, mensajes, repositorio o logs.
-- Configurar en `data/location-policy.xml` los nombres aceptados y el polígono oficial de Rawson/Playa Unión. No inventar coordenadas ni tomar un radio aproximado como límite municipal.
+- Configurar en `data/policies/location-policy.xml` los nombres aceptados y el polígono oficial de Rawson/Playa Unión. No inventar coordenadas ni tomar un radio aproximado como límite municipal.
 
 ## Flujo
 1. Solicitar una dirección suficientemente precisa; no inferirla solo desde el número de teléfono o ubicación aproximada.

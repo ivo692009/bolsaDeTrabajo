@@ -10,7 +10,7 @@ Responder consultas frecuentes y encontrar profesionales por categoría, tarea y
 - Mostrar solo perfiles publicados (`status=active`), disponibles (`availabilityStatus=active`), con la tarea declarada, zona de servicio activa y al menos un horario válido.
 - Si el cliente indica día y hora, filtrar por un intervalo que cubra esa hora en la zona horaria del proyecto. Sin fecha/hora, presentar el horario declarado sin llamarlo reserva confirmada.
 - Si no hay coincidencias en la zona que pide el cliente, buscar profesionales activos y disponibles que declaren el mismo tipo de trabajo en otras zonas configuradas; ordenarlos por distancia aproximada entre puntos de referencia de las zonas.
-- Mostrar un máximo de cinco opciones, zona/horario declarados y distancia aproximada solo cuando esté calculable. No mostrar teléfonos antes de la aceptación.
+- Mostrar un máximo de cinco opciones, tamaño total de cuadrilla (profesional + trabajadores adicionales), zona/horario declarados y distancia aproximada solo cuando esté calculable. Esta información ayuda al cliente a valorar trabajos grandes; no afirmar capacidad para completarlos si los detalles del trabajo no se conocen. No mostrar teléfonos antes de la aceptación.
 
 ## Entradas
 - Solicitud del cliente, categoría o descripción de la tarea.

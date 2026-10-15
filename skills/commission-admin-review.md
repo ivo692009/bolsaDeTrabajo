@@ -4,7 +4,7 @@
 Permitir que una persona administradora revise manualmente el comprobante privado de una comisión y registre si el profesional cumplió el pago.
 
 ## Acceso
-- Solo el rol `commission_admin` accede a la evidencia en `evidence/commission-payments/<request-id>/`.
+- Solo el rol `commission_admin` accede a la evidencia en `storage/evidence/commission-payments/<request-id>/`.
 - Validar rol, sesión y solicitud antes de mostrar un archivo.
 - No compartir capturas con clientes, profesionales distintos al remitente ni galería pública.
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request id="request-id" requestCode="CODE" status="connected" createdAt="" locationStatus="validated_in_area">
+  <client phone="" phoneCapturedAt="" />
+  <serviceLocation rawAddress="" normalizedAddress="" validatedAreaId="" geocodedAt="" />
+  <privacyRetention closedAt="" anonymizeAfter="" anonymizedAt="" policy="90_days_after_request_closed" />
+  <professional id="professional-id" whatsappE164="" response="accepted" />
+  <agreement status="confirmed">
+    <serviceItems>
+      <service id="work-item-01" description="Descripción del trabajo" laborAmount="" currency="ARS" status="confirmed" />
+    </serviceItems>
+    <laborSubtotal amount="" currency="ARS" confirmedByClient="true" confirmedByProfessional="true" confirmedAt="" />
+    <duration unit="minutes" agreedDurationMinutes="" status="pending_confirmation" confirmedByClientAt="" confirmedByProfessionalAt="" agreedAt="" />
+  </agreement>
+  <workTiming status="pending_start_confirmation" startProposedAt="" startedAt="" expectedCompletionAt="" completedAt="" elapsedMinutes="">
+    <start clientConfirmedAt="" professionalConfirmedAt="" />
+    <completionReport clientOutcome="pending" clientReportedAt="" professionalOutcome="pending" professionalReportedAt="" mutuallyConfirmedAt="" />
+    <reminder status="not_scheduled" dueAt="" lastSentAt="" retryCount="0" maxRetries="2" />
+    <timeline />
+  </workTiming>
+  <completion status="pending" retryCount="0" maxRetries="2" escalationStatus="none">
+    <client outcome="pending" confirmedAt="" />
+    <professional outcome="pending" confirmedAt="" />
+  </completion>
+  <nonCompletionCase status="not_applicable" agreedAt="" reportedAt="" reviewedAt="" reviewerAllowlistId="" outcome="" attributedParty="" reason="" suspensionId="" />
+</request>

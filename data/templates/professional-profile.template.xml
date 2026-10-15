@@ -5,6 +5,13 @@
   <lastName required="true">Apellido</lastName>
   <whatsappPhone e164="" source="inbound_whatsapp_sender" verifiedAt="" unique="true" changeRequiresReview="true" />
   <socialLinks required="true" />
+  <crew hasAdditionalWorkers="false" additionalWorkers="0" updatedAt="" />
+  <dataDeletionRequest id="" status="none" requestedAt="" requestedByProfessionalId="" previousProfileStatus="" previousAvailabilityStatus="" reviewedAt="" reviewerAllowlistId="" decision="" decisionReason="" anonymizedAt="" />
+  <reliabilityHistory totalSuspensions="0" updatedAt="">
+    <suspensions>
+      <event id="" type="suspension|third_suspension_deactivation|permanent_deactivation" status="" startedAt="" expiresAt="" causeRequestIds="" reviewedAt="" reviewerAllowlistId="" decision="" reactivatedAt="" reactivationSource="" />
+    </suspensions>
+  </reliabilityHistory>
   <serviceCategories required="true">
     <serviceCategory id="category-id">
       <jobTypes>

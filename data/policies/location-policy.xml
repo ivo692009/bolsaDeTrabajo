@@ -22,6 +22,6 @@
   <storagePolicy>
     <retainRawGeocodingResponse>false</retainRawGeocodingResponse>
     <retainPreciseCoordinates>false</retainPreciseCoordinates>
-    <retainNormalizedAddress>pending_configuration</retainNormalizedAddress>
+    <retainNormalizedAddress>until_90_days_after_request_closure_then_anonymize</retainNormalizedAddress>
   </storagePolicy>
 </locationPolicy>

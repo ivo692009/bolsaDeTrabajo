@@ -11,7 +11,9 @@ Permitir que un profesional administre su información y los trabajos que ofrece
 
 ## Información que puede administrar
 - Consultar y modificar sus propios datos descriptivos y redes sociales.
-- Agregar rubros y tipos de trabajo ya existentes en `data/service-categories.xml`.
+- Indicar y actualizar si tiene trabajadores adicionales a su cargo y la cantidad entera; el conteo excluye al propio profesional.
+- Declara `0` si no tiene trabajadores adicionales; el total de cuadrilla que se presenta a clientes será ese conteo más el profesional.
+- Agregar rubros y tipos de trabajo ya existentes en `data/catalog/service-categories.xml`.
 - Modificar sus propias descripciones, alias de servicio y disponibilidad registrada, siempre que el catálogo permita esos datos.
 - Proponer un nuevo rubro o tipo de trabajo al rol `catalog_manager`; no crear categorías globales ni opciones libres directamente.
 - Solicitar la pausa o reactivación de su perfil mediante la skill `professional-availability-status.md`.
@@ -29,6 +31,7 @@ Permitir que un profesional administre su información y los trabajos que ofrece
 - La capacidad del profesional cambia solo mediante agregado o modificación de datos propios válidos; no se altera el catálogo común.
 - No divulgar información de otros profesionales durante el proceso.
 - Si la identidad del remitente es ambigua, el número no está verificado o falla la escritura XML, no aplicar el cambio.
+- `additionalWorkers` debe ser un entero mayor o igual a cero; `hasAdditionalWorkers` debe ser `true` exactamente cuando el conteo sea mayor que cero.
 
 ## Resultado esperado
 Cambio confirmado y guardado en el perfil correcto, asociado de forma única al número remitente, con historial de auditoría y sin borrado arbitrario.

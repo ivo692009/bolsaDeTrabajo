@@ -4,7 +4,7 @@
 Restringir revisión de comprobantes y operaciones administrativas a números de WhatsApp autorizados explícitamente.
 
 ## Flujo
-1. Obtener el número remitente del webhook oficial, normalizarlo a E.164 y buscar coincidencia exacta con una entrada habilitada de `data/admin-whatsapp-numbers.xml`.
+1. Obtener el número remitente del webhook oficial, normalizarlo a E.164 y buscar coincidencia exacta con una entrada habilitada de `runtime/data/admin-whatsapp-numbers.xml`.
 2. Comprobar que la entrada tenga el rol requerido para la acción solicitada.
 3. Rechazar por defecto números ausentes, deshabilitados, duplicados o con formato inválido; no revelar si un número administrativo existe.
 4. Registrar actor, acción, objeto, resultado y fecha en un historial local de auditoría.

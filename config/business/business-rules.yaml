@@ -7,26 +7,43 @@ project:
 architecture:
   communication_channel: "API oficial de Meta para WhatsApp"
   runtime: "Windows PowerShell 5.1"
-  webhook_script: "scripts/whatsapp-bot.ps1"
+  webhook_script: "src/whatsapp/whatsapp-bot.ps1"
   webhook_path: "/webhook"
   webhook_listener_bind: "127.0.0.1"
   webhook_public_tls_termination: "reverse_proxy_or_managed_tunnel"
-  response_engine: "deterministic_rules_and_local_xml"
-  llm_provider: null
+  response_engine: "deterministic_business_actions_and_optional_openai_responses_for_general_questions"
+  llm_provider: "OpenAI Responses API (optional; OPENAI_API_KEY required)"
+  chatbot_context: "config/business/chatbot-context.md"
+  chatbot_conversation_store: "runtime/chatbot-conversations.xml"
+  chatbot_conversation_retention_days: 30
+  chatbot_max_recent_exchanges: 4
+  chatbot_api_response_storage: false
+  chatbot_can_execute_business_actions: false
+  chatbot_moderation_model: "omni-moderation-latest"
+  chatbot_moderation_fail_closed: true
+  chatbot_scope: "local services, professional type guidance, and platform operation"
+  chatbot_must_not_disclose_personal_data: true
+  chatbot_must_not_generate_offensive_content: true
   internal_geocoding_provider: "Google Maps Geocoding API"
   user_and_professional_storage: "Archivos XML locales"
   multimedia_storage: "Directorio local con referencias desde XML"
-  commission_evidence_storage: "Directorio local privado separado de gallery"
-  service_category_catalog: "data/service-categories.xml"
+  commission_evidence_storage: "storage/evidence/commission-payments (privado, separado de la galería)"
+  service_category_catalog: "data/catalog/service-categories.xml"
   service_category_template: "data/templates/service-category.template.xml"
   service_area_template: "data/templates/service-area.template.xml"
   professional_profile_template: "data/templates/professional-profile.template.xml"
-  location_policy: "data/location-policy.xml"
-  admin_allowlist: "data/admin-whatsapp-numbers.xml"
+  request_record_template: "data/templates/request-record.template.xml"
+  professional_data_deletion_template: "data/templates/professional-data-deletion.template.xml"
+  local_env_file: ".env"
+  env_file_gitignored: true
+  process_environment_overrides_env_file: true
+  location_policy: "data/policies/location-policy.xml"
+  admin_allowlist: "runtime/data/admin-whatsapp-numbers.xml"
   runtime_data_templates:
     professionals: "data/templates/professionals.template.xml"
     requests: "data/templates/requests.template.xml"
     admin_allowlist: "data/templates/admin-whatsapp-numbers.template.xml"
+    messaging_preferences: "data/templates/messaging-preferences.template.xml"
   runtime_data_gitignored: true
   initial_service_areas: ["Rawson, Chubut", "Playa Unión, Chubut"]
   professional_credentials_verified_in_mvp: false
@@ -55,6 +72,8 @@ offer_routing:
   accept_reply_without_code: false
 
 storage:
+  runtime_directory: "runtime/"
+  backup_directory: "runtime/backups/"
   writer_mode: "single_instance_serialized_queue"
   validate_xml_before_replace: true
   replace_from_temporary_file_atomically: true
@@ -62,30 +81,51 @@ storage:
   backup_frequency: "daily"
   backup_retention_count: 90
 
+privacy_and_messaging:
+  closed_request_personal_data_retention_days: 90
+  retention_clock_starts_at: "request_closed_at"
+  fields_to_anonymize: ["client.phone", "serviceLocation.rawAddress", "serviceLocation.normalizedAddress"]
+  keep_non_identifying_request_history: true
+  precise_coordinates_retained: false
+  raw_geocoding_response_retained: false
+  opt_out_command: "BAJA"
+  reconsent_command: "ACEPTO MENSAJES"
+  suppress_all_automated_outbound_until_reconsent: true
+  opt_out_acknowledgement_sent: false
+  preference_store: "runtime/data/messaging-preferences.xml"
+  preference_identifier: "hmac_sha256_of_normalized_e164"
+  preference_hmac_key_env: "WA_PREFERENCES_HMAC_KEY"
+  preference_hmac_key_format: "64_hex_characters_from_32_random_bytes"
+  opt_out_preference_retained_until_reconsent: true
+  anonymize_backup_copies_by_deadline: true
+  implementation_status: "partially_implemented"
+
 webhook_processing:
   deduplicate_by: "meta_message_id"
-  deduplication_store: "data/webhook-events/<year>.xml"
+  deduplication_store: "runtime/webhook-events/<year>.xml"
   state_transitions_idempotent: true
   validate_hmac_sha256: true
-  maximum_body_bytes: 1048576
+  maximum_body_bytes_env: "WA_WEBHOOK_MAX_BODY_BYTES"
   retention: "permanent"
   archive_partition: "calendar_year"
 
 administrator_access:
-  authentication: "enabled_sender_in_data/admin-whatsapp-numbers.xml_with_matching_role"
+  authentication: "sender must have an enabled entry and matching role in runtime/data/admin-whatsapp-numbers.xml"
   self_enrollment: false
 
 roles:
   client:
-    can: ["request_service", "select_professional", "confirm_labor_subtotal", "confirm_completion_or_cancellation", "submit_review"]
+    can: ["request_service", "select_professional", "confirm_labor_subtotal", "confirm_work_duration", "confirm_work_start", "confirm_completion_or_cancellation", "submit_review"]
   professional:
-    can: ["manage_own_profile", "add_or_modify_own_capabilities", "pause_or_reactivate_own_profile", "accept_or_reject_request", "confirm_labor_subtotal", "confirm_completion_or_cancellation", "submit_commission_proof"]
+    can: ["manage_own_profile", "add_or_modify_own_capabilities", "pause_or_reactivate_own_profile", "request_own_data_deletion", "accept_or_reject_request", "confirm_labor_subtotal", "confirm_work_duration", "confirm_work_start", "confirm_completion_or_cancellation", "submit_commission_proof"]
     cannot: ["change_linked_phone_without_review", "delete_profile_data_or_history", "edit_global_service_catalog"]
   assistant_bot:
     can: ["query_local_files", "communicate_via_official_whatsapp_api", "record_workflow_states", "classify_message_intent"]
     cannot: ["invent_business_data", "verify_payment_proof", "confirm_bank_deposit_from_image"]
   commission_admin:
-    can: ["read_private_commission_proof", "accept_or_reject_commission_proof", "confirm_payment_by_manual_review", "review_phone_change", "review_information_removal", "record_review_decision"]
+    can: ["read_private_commission_proof", "accept_or_reject_commission_proof", "confirm_payment_by_manual_review", "review_phone_change", "review_information_removal", "approve_or_reject_professional_data_deletion", "record_review_decision"]
+  professional_reliability_admin:
+    can: ["review_non_completion_case", "attribute_or_clear_professional_fault", "apply_or_reactivate_professional_suspension", "record_reliability_decision"]
   catalog_manager:
     can: ["add_service_category", "edit_service_category", "deactivate_service_category", "add_job_type"]
 
@@ -99,10 +139,59 @@ professional_identity:
   phone_change_requires: "authorized_review_and_new_number_verification"
   role_resolution: "per_message_intent"
 
+professional_crew:
+  additional_workers_field: "crew.additionalWorkers"
+  has_additional_workers_field: "crew.hasAdditionalWorkers"
+  additional_workers_minimum: 0
+  count_includes_professional: false
+  total_crew_formula: "1 + additionalWorkers"
+  flag_derived_from_count: true
+  required_for_listing: true
+
+work_timing:
+  duration_unit: "minutes"
+  duration_must_match_and_be_confirmed_by_both: true
+  start_requires_professional_and_client_confirmation: true
+  expected_completion_formula: "startedAt + agreedDurationMinutes"
+  completion_check_at_expected_end: true
+  completion_must_be_confirmed_by_both: true
+  scheduler_implemented: false
+
+professional_data_deletion:
+  request_requires_authenticated_whatsapp_number: true
+  admin_role: "commission_admin"
+  admin_allowlist: "runtime/data/admin-whatsapp-numbers.xml"
+  immediate_effect: "hide_profile_and_disable_new_offers"
+  approval_blocked_by_open_requests_or_commissions: true
+  approved_action: "anonymize_profile_and_keep_non_identifying_tombstone"
+
+professional_reliability:
+  qualifying_work_requires_mutual_confirmation_of: ["scope", "labor_subtotal", "duration"]
+  qualifying_case_requires_admin_finding_attributable_to: "professional"
+  case_review_role: "professional_reliability_admin"
+  case_record_location: "request.nonCompletionCase"
+  count_window_days: 60
+  cases_per_suspension: 3
+  each_case_counts_once: true
+  suspension_duration_days: 60
+  early_reactivation_requires: "administrative_review_and_explicit_decision"
+  automatic_reactivation_after_days: 60
+  suspension_count_lifetime: true
+  deactivation_after_total_suspensions: 3
+  deactivated_profile_status: "deactivated"
+  post_third_suspension_case_threshold: 3
+  post_third_suspension_case_window_days: 60
+  permanent_deactivation_profile_status: "permanently_deactivated"
+  permanent_deactivation_reactivation_requires: "explicit_administrative_review"
+  permanent_deactivation_automatic_reactivation: false
+  unavailable_profile_statuses: ["suspended", "deactivated", "permanently_deactivated"]
+  automatic_reactivation_status: "active"
+  new_opportunities_allowed_while_suspended_or_deactivated: false
+  accepted_work_is_not_automatically_cancelled: true
+  implementation_status: "specified_not_implemented"
+
 operational_parameters:
   professional_response_timeout_minutes: null
-  follow_up_delay_hours: null
-  initial_follow_up_delay_hours: null
   completion_check_interval_hours: 24
   completion_check_retries: 2
   commission:
@@ -117,12 +206,12 @@ operational_parameters:
     cancellation_result: "no_commission"
     no_response_result: "closed_unconfirmed_no_commission"
     disagreement_retry_count: 2
-    disagreement_after_retry: "manual_review_no_commission_until_resolved"
+    disagreement_after_retry: "manual_review_no_commission_unless_bilateral_completion_confirmation"
     rounding_policy: "floor_to_whole_ars_peso"
     status: "configured"
     proof_required: true
     proof_amount_scope: "commission_due_only"
-    proof_storage: "evidence/commission-payments/<request-id>/"
+    proof_storage: "storage/evidence/commission-payments/<request-id>/"
     proof_verification: "authorized_admin_manual_visual_review"
     accepted_payment_status: "paid"
     payment_confirmation_method: "manual_admin_review"
@@ -179,7 +268,7 @@ business_rules:
     description: "El contacto por WhatsApp debe respetar el consentimiento y las preferencias de cada persona."
     priority: "critical"
     when: "El sistema inicia o continúa una conversación por WhatsApp."
-    then: "Debe verificarse el consentimiento, respetarse las solicitudes de no contacto y usarse una plantilla aprobada cuando las politicas de Meta lo requieran."
+    then: "El comando exacto BAJA registra una preferencia de no contacto vinculada a un HMAC del E.164 y bloquea todos los mensajes salientes automáticos hasta recibir ACEPTO MENSAJES. No enviar confirmación al recibir BAJA; marcar el evento procesado y conservar solo la preferencia mínima hasta el reconsentimiento. Sin baja, responder a conversaciones iniciadas por la persona y usar plantillas aprobadas cuando las políticas de Meta las requieran."
     exceptions: []
     status: "draft"
 
@@ -223,7 +312,7 @@ business_rules:
     title: "Seguimiento y reseña tras el servicio"
     description: "Cliente y Profesional reciben consultas cada 24 horas con un máximo de dos reintentos para confirmar el resultado del trabajo."
     priority: "high"
-    when: "Se cumple el plazo de seguimiento configurado para una solicitud aceptada."
+    when: "Se alcanza expectedCompletionAt, calculado desde inicio y duración confirmados por ambas partes."
     then: "Solo una confirmación completed de ambas partes habilita reseña y comisión; cancelación bilateral o silencio después de dos reintentos cierra sin comisión y conserva trazabilidad."
     exceptions: []
     status: "draft"
@@ -266,10 +355,10 @@ business_rules:
 
   - id: "BR-016"
     title: "Seguimiento desde solicitud aceptada"
-    description: "El seguimiento pos-servicio se programa después de la aceptación y usa un plazo configurable."
+    description: "El seguimiento pos-servicio se programa al vencimiento estimado del trabajo, calculado desde inicio y duración confirmados por ambas partes."
     priority: "high"
     when: "El profesional acepta una solicitud."
-    then: "Se programa la consulta al cliente usando el plazo configurado; si el plazo no está definido, no se inventa una fecha de envío."
+    then: "Se programa la consulta a ambas partes para expectedCompletionAt; no se usa un retraso independiente desde la aceptación. Si no hay inicio o duración confirmados, no se inventa una fecha."
     exceptions: []
     status: "draft"
 
@@ -278,7 +367,7 @@ business_rules:
     description: "La capacidad de un Profesional se determina por un catálogo extensible, sin máximo fijo, de rubros, descripciones, alias y tipos de trabajo."
     priority: "critical"
     when: "Se registra, publica o busca un perfil profesional."
-    then: "Solo un catalog_manager agrega o modifica rubros mediante data/templates/service-category.template.xml; las referencias se validan contra data/service-categories.xml y la capacidad no se infiere por género."
+    then: "Solo un catalog_manager agrega o modifica rubros mediante data/templates/service-category.template.xml; las referencias se validan contra data/catalog/service-categories.xml y la capacidad no se infiere por género."
     exceptions: []
     status: "draft"
 
@@ -386,7 +475,7 @@ business_rules:
     description: "Las acciones administrativas por WhatsApp requieren un remitente habilitado localmente con el rol solicitado."
     priority: "critical"
     when: "Se solicita revisión de pago, número, datos o catálogo."
-    then: "Se valida coincidencia E.164 y rol en data/admin-whatsapp-numbers.xml; no se permite alta administrativa por chat."
+    then: "Se valida coincidencia E.164 y rol en runtime/data/admin-whatsapp-numbers.xml; no se permite alta administrativa por chat."
     exceptions: []
     status: "draft"
 
@@ -426,7 +515,79 @@ business_rules:
     exceptions: []
     status: "draft"
 
+  - id: "BR-034"
+    title: "Cuadrilla profesional entera y consistente"
+    description: "Cada perfil publicado declara trabajadores adicionales a cargo mediante un entero no negativo; el profesional no se cuenta en ese número."
+    priority: "high"
+    when: "Se registra, modifica o lista un perfil profesional."
+    then: "hasAdditionalWorkers debe coincidir con additionalWorkers > 0; el total mostrado es 1 + additionalWorkers. Conteos ausentes, negativos, no enteros o inconsistentes excluyen el perfil de resultados hasta corregirse."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-035"
+    title: "Plazo de trabajo confirmado por ambas partes"
+    description: "Cliente y Profesional acuerdan la misma duración positiva en minutos y confirman el inicio real del trabajo."
+    priority: "high"
+    when: "Se aceptó la oferta y se confirmó el subtotal de mano de obra."
+    then: "Al confirmar duración e inicio por ambas partes se registra startedAt y se calcula expectedCompletionAt; al vencer, se consulta a ambas partes sin marcar finalización automáticamente."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-036"
+    title: "Borrado con revisión manual allowlist"
+    description: "Un profesional autenticado puede solicitar el borrado de sus datos, pero solo commission_admin puede aprobar o rechazar."
+    priority: "critical"
+    when: "El profesional solicita borrar sus datos desde WhatsApp."
+    then: "Se oculta el perfil y queda pending_admin_review; no se anonimiza hasta resolver trabajos/comisiones abiertos y aprobar con remitente incluido en la allowlist."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-037"
+    title: "Comision solo por finalizacion bilateral explicita"
+    description: "No existe comision exigible si Cliente y Profesional no confirman explicitamente que el trabajo se completo."
+    priority: "critical"
+    when: "Se revisa el resultado de una solicitud de trabajo."
+    then: "Solo completed confirmado por ambas partes y con subtotal de mano de obra tambien confirmado por ambas partes genera una comision; cancelacion, silencio, desacuerdo o revision administrativa sin confirmacion bilateral no generan cobro."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-038"
+    title: "Incumplimiento atribuible al profesional con revision"
+    description: "Solo un trabajo formalmente acordado y un incumplimiento confirmado por revision administrativa pueden contar para una suspension."
+    priority: "critical"
+    when: "Un trabajo no se completa o una parte reporta incumplimiento."
+    then: "El trabajo cuenta solo si Cliente y Profesional confirmaron alcance, subtotal de mano de obra y duracion, y una persona con rol professional_reliability_admin determina y registra que la causa es atribuible al Profesional; cada solicitud puede contar una sola vez."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-039"
+    title: "Suspension y desactivacion por reincidencia"
+    description: "Tres casos confirmados y atribuibles al Profesional dentro de una ventana movil de 60 dias generan una suspension de 60 dias."
+    priority: "critical"
+    when: "Se confirma administrativamente el tercer caso elegible no utilizado dentro de la ventana movil."
+    then: "Se registra cada suspension y sus fechas; se excluye el perfil de busquedas y nuevas ofertas. La reactivacion antes del dia 60 requiere decision administrativa explicita; si no hubo reactivacion, se activa automaticamente al cumplir 60 dias. La tercera suspension acumulada pasa a deactivated, sujeta al mismo plazo de 60 dias. Tras reactivarse, tres nuevos casos confirmados en 60 dias pasan la cuenta a permanently_deactivated, estado sin vencimiento ni reactivacion automatica y reversible solo por decision administrativa explicita."
+    exceptions: ["Las solicitudes ya aceptadas no se cancelan automaticamente."]
+    status: "draft"
+
+  - id: "BR-040"
+    title: "Anonimizacion de datos de cliente tras cierre"
+    description: "El telefono del Cliente y la direccion del servicio se anonimizan a los 90 dias del cierre de la solicitud."
+    priority: "critical"
+    when: "Una solicitud pasa a estado cerrado."
+    then: "Registrar closedAt y anonymizeAfter; al vencer 90 dias, eliminar o anonimizar client.phone y las direcciones cruda y normalizada en el archivo activo y en sus respaldos, preservando historial no identificatorio. No retener coordenadas precisas ni respuestas crudas de geocodificacion."
+    exceptions: []
+    status: "draft"
+
+  - id: "BR-041"
+    title: "Baja total de mensajes con reconsentimiento explicito"
+    description: "BAJA impide toda comunicacion automatizada al remitente hasta el comando ACEPTO MENSAJES."
+    priority: "critical"
+    when: "Un remitente envia BAJA o una comunicacion automatica se intenta dirigir a un remitente con preferencia opted_out."
+    then: "Registrar la preferencia opted_out con HMAC-SHA256 de E.164 en runtime/data/messaging-preferences.xml; no responder al comando BAJA ni procesar otros intents del remitente. Bloquear respuestas, avisos y mensajes de otros flujos hasta ACEPTO MENSAJES; el reconsentimiento elimina el registro HMAC y permite reanudar mensajes."
+    exceptions: []
+    status: "draft"
+
 metadata:
-  last_updated: "2026-10-12"
+  last_updated: "2026-10-15"
   owner: "Equipo de producto"
-  notes: "system-specification.md es la fuente de verdad funcional. El webhook inicial usa PowerShell 5.1 y respuestas deterministas. Configurar credenciales Meta, polígono oficial, allowlist admin, límites de medios, plazo inicial y expiración de ofertas. Backups locales diarios con 90 copias; pérdida física del servidor sigue siendo riesgo del MVP."
+  notes: "docs/business/system-specification.md es la fuente de verdad funcional. El webhook usa PowerShell 5.1; acciones deterministas y chatbot OpenAI opcional para preguntas generales, con contexto editable en config/business/chatbot-context.md. Configurar credenciales Meta y OPENAI_API_KEY si se habilita, polígono oficial, allowlist admin, límites de medios y expiración de ofertas. Los flujos de acuerdo, sanciones y reactivación están especificados, pero aún no implementados. Backups locales diarios con 90 copias bajo runtime/backups/; pérdida física del servidor sigue siendo riesgo del MVP."

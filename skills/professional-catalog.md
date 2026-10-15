@@ -8,11 +8,11 @@ Administrar el catálogo local de profesionales en XML, manteniendo datos estruc
 - Guiar por WhatsApp el alta solicitando nombre, apellido y redes sociales; obtener el número único del evento entrante, normalizarlo a E.164 y evitar duplicados.
 - Autenticar consultas y cambios de perfil exclusivamente mediante coincidencia exacta y única con el número remitente de WhatsApp.
 - Insertar el alta o actualizar el registro XML asociado al número remitente ya verificado.
-- Asignar cualquier cantidad de rubros y tipos de trabajo existentes en `data/service-categories.xml` antes de publicar el perfil.
-- Declarar una o más zonas activas desde `data/location-policy.xml` y horarios semanales válidos con zona horaria antes de aparecer en búsquedas.
+- Asignar cualquier cantidad de rubros y tipos de trabajo existentes en `data/catalog/service-categories.xml` antes de publicar el perfil.
+- Declarar una o más zonas activas desde `data/policies/location-policy.xml` y horarios semanales válidos con zona horaria antes de aparecer en búsquedas.
 - Mantener un catálogo extensible sin enumeraciones cerradas: agregar rubros siguiendo `data/templates/service-category.template.xml`, con ID estable, descripciones y tantos alias y tipos de trabajo como sean necesarios.
 - Mantener rubros/trabajos, zonas de cobertura, horarios y referencias de galería en el perfil; son requisitos para publicar, aunque no campos obligatorios del alta inicial.
-- Mantener el XML de ejemplo en `data/professionals.xml` como referencia de formato.
+- Usar `data/templates/professional-profile.template.xml` como referencia de formato; los perfiles operativos se guardan en `runtime/data/professionals.xml` y no se versionan.
 
 ## Entradas
 - Mensajes del profesional recibidos por WhatsApp y operación solicitada (alta, consulta o actualización).

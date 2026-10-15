@@ -4,14 +4,15 @@
 Gestionar la comunicación bidireccional entre clientes, profesionales y el sistema mediante WhatsApp Business Platform de Meta.
 
 ## Implementación inicial
-El webhook local está implementado en `scripts/whatsapp-bot.ps1` para Windows PowerShell 5.1. Su configuración y conexión con Meta se documentan en `scripts/README.md`.
+El webhook local está implementado en `src/whatsapp/whatsapp-bot.ps1` para Windows PowerShell 5.1. Su configuración y conexión con Meta se documentan en `docs/operations/whatsapp-bot.md`.
 
 ## Acciones
 - Recibir mensajes entrantes y asociarlos al número de teléfono y conversación correspondientes.
 - Enviar respuestas automatizadas y plantillas aprobadas cuando corresponda.
 - Entregar mensajes de estado sobre solicitudes, propuestas y conexiones.
 - Registrar identificadores, marcas de tiempo y estados de entrega disponibles en la API.
-- Persistir el ID de cada mensaje entrante de Meta en `data/requests.xml` para deduplicar webhooks repetidos antes de ejecutar acciones.
+- Persistir el ID de cada mensaje entrante de Meta en `runtime/webhook-events/<year>.xml` para deduplicar webhooks repetidos antes de ejecutar acciones.
+- Procesar `BAJA` como intent prioritario y bloquear cualquier mensaje saliente a ese remitente hasta `ACEPTO MENSAJES`; aplicar la preferencia en el webhook y en el envío central.
 - Usar exclusivamente la API oficial de Meta para WhatsApp; no cambiar a otros canales ni dirigir a páginas o aplicaciones externas.
 
 ## Entradas
@@ -22,6 +23,7 @@ El webhook local está implementado en `scripts/whatsapp-bot.ps1` para Windows P
 ## Restricciones
 - Usar únicamente credenciales almacenadas de forma segura; nunca incluir tokens en mensajes, logs o respuestas.
 - Respetar consentimiento, preferencias de contacto, políticas de Meta y la ventana de atención aplicable. Fuera de ella, usar una plantilla aprobada cuando sea necesario.
+- No guardar el E.164 en la lista de preferencias; usar el HMAC con la clave estable `WA_PREFERENCES_HMAC_KEY`.
 - No enviar datos personales de terceros sin autorización.
 - Validar la autenticidad de webhooks antes de procesar eventos y evitar duplicar mensajes ante reintentos.
 - Aceptar POST solo en `/webhook`, con HMAC-SHA256 válido; verificar el handshake GET con `WA_VERIFY_TOKEN`.

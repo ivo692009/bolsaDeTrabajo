@@ -8,7 +8,7 @@ Liquidar una sola comisión por trabajo completado y conservar de forma privada 
 2. Leer la suma de importes de mano de obra por servicio, confirmada por ambas partes. Excluir materiales, trámites e importes adicionales.
 3. Calcular una única comisión: 5% del subtotal de mano de obra, en pesos argentinos, redondeada hacia abajo al peso entero. Ejemplo: ARS 12.345 x 0.05 = ARS 617,25; la comisión es ARS 617.
 4. Comunicar al Profesional únicamente el importe de la comisión adeudada y pedir un comprobante de transferencia por ese importe; no pedir un comprobante del precio total del trabajo.
-5. Recibir la imagen por la API oficial de WhatsApp, almacenarla fuera de la galería pública bajo `evidence/commission-payments/<request-id>/` y guardar su ruta relativa y metadatos en el XML de solicitudes.
+5. Recibir la imagen por la API oficial de WhatsApp, almacenarla fuera de la galería pública bajo `storage/evidence/commission-payments/<request-id>/` y guardar su ruta relativa y metadatos en el XML de solicitudes.
 6. Mantener la evidencia como `proof_submitted` / `pending_admin_review` hasta la revisión del rol `commission_admin`.
 7. `commission_admin` compara importe, fecha, destino y referencia visibles con la comisión esperada; registra `visually_reviewed` o `rejected`, quién revisó, cuándo y notas.
 8. Si Administración acepta la captura, marcar `paymentStatus=paid` y `paidByAdminReview=true`, conservando `bankDepositVerified=false`; esto representa cumplimiento aceptado manualmente, no conciliación bancaria automática. Reenvíos actualizan la evidencia de esa misma comisión.

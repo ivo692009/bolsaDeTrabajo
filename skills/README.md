@@ -16,11 +16,16 @@ Cada archivo describe una capacidad funcional, sus entradas, acciones y restricc
 12. `address-locality-validation.md`: geocodificación interna y validación de zona.
 13. `admin-access-control.md`: autenticación administrativa mediante allowlist.
 14. `media-intake-validation.md`: validación y almacenamiento de imágenes recibidas.
+15. `work-duration-tracking.md`: duración acordada, inicio y finalización del trabajo.
+16. `professional-data-deletion.md`: solicitud de borrado y aprobación administrativa.
+17. `general-service-chatbot.md`: preguntas conversacionales con contexto editable y límites explícitos.
+18. `professional-reliability-and-suspension.md`: revisión de trabajos acordados no completados, suspensiones y desactivación de cuentas.
+19. `messaging-consent-and-data-retention.md`: baja/reconsentimiento por WhatsApp y anonimización de solicitudes cerradas.
 
-Los XML runtime de perfiles, solicitudes y allowlist se inicializan desde plantillas de `../data/templates/` y no se versionan. El perfil usa `../data/templates/professional-profile.template.xml`; los rubros, `../data/service-categories.xml`; las zonas, `../data/location-policy.xml` y `../data/templates/service-area.template.xml`. La fuente de verdad es `../business-rules/system-specification.md`.
+Los XML runtime de perfiles, solicitudes y allowlist se inicializan desde plantillas de `../data/templates/` y se guardan en `../runtime/data/`, excluidos de Git. El perfil usa `../data/templates/professional-profile.template.xml`; los rubros, `../data/catalog/service-categories.xml`; las zonas, `../data/policies/location-policy.xml` y `../data/templates/service-area.template.xml`. La fuente de verdad es [la especificación funcional](../docs/business/system-specification.md).
 
-La evidencia de transferencias se almacena en `../evidence/commission-payments/`, separada de la galería de referencias.
+La evidencia de transferencias se almacena en `../storage/evidence/commission-payments/`, separada de la galería de referencias.
 
-El webhook inicial de WhatsApp está implementado en `../scripts/whatsapp-bot.ps1`; la configuración Meta y sus límites están en `../scripts/README.md`.
+El webhook inicial de WhatsApp está implementado en `../src/whatsapp/whatsapp-bot.ps1`; la configuración Meta y sus límites están en [la guía de operación](../docs/operations/whatsapp-bot.md).
 
 Las plantillas genéricas de `templates/` siguen disponibles para agregar capacidades futuras. Los parámetros comerciales, legales y de integración deben confirmarse antes de producción.

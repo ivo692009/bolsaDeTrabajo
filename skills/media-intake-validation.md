@@ -9,7 +9,7 @@ Guardar fotos de trabajos y comprobantes de transferencia de forma segura, evita
 3. Descargar desde Meta con URL temporal por HTTPS, validar expiración y comprobar que el archivo recibido no esté vacío ni truncado.
 4. Generar un nombre interno aleatorio; nunca usar el nombre entregado por el remitente como ruta.
 5. Para portafolio, guardar en galería local y relacionar con el perfil solo después de validar consentimiento.
-6. Para comprobantes, guardar exclusivamente bajo `evidence/commission-payments/<request-id>/`, con permisos privados; no copiar a galería.
+6. Para comprobantes, guardar exclusivamente bajo `storage/evidence/commission-payments/<request-id>/`, con permisos privados; no copiar a galería.
 7. Registrar tamaño, tipo detectado, remitente, fecha, hash criptográfico, categoría y estado de validación en XML. No guardar tokens ni URLs temporales.
 8. Evitar duplicados por hash dentro del mismo flujo. Si la descarga falla, informar que no se recibió y pedir reenvío; no registrar éxito.
 
