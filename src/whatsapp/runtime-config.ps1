@@ -37,6 +37,10 @@ function Resolve-WhatsAppRuntimeConfiguration {
         return $parsed
     }
     $port = & $getInteger 'WA_PORT' 8080 1024 65535
+    $displayPhoneNumber = & $getValue 'WA_DISPLAY_PHONE_NUMBER'
+    $phoneNumberSource = 'not_configured'
+    if (-not [string]::IsNullOrWhiteSpace([string]$displayPhoneNumber)) { $phoneNumberSource = 'business_number' }
+    else { $displayPhoneNumber = & $getValue 'WA_TEST_PHONE_NUMBER'; if (-not [string]::IsNullOrWhiteSpace([string]$displayPhoneNumber)) { $phoneNumberSource = 'meta_test_number' } }
     if ($PortOverride -gt 0) {
         if ($PortOverride -lt 1024 -or $PortOverride -gt 65535) { throw 'El parámetro Port debe estar entre 1024 y 65535.' }
         $port = $PortOverride
@@ -49,6 +53,8 @@ function Resolve-WhatsAppRuntimeConfiguration {
         VerifyToken = (& $getValue 'WA_VERIFY_TOKEN')
         AccessToken = (& $getValue 'WA_ACCESS_TOKEN')
         PhoneNumberId = (& $getValue 'WA_PHONE_NUMBER_ID')
+        DisplayPhoneNumber = [string]$displayPhoneNumber
+        DisplayPhoneNumberSource = $phoneNumberSource
         GraphApiVersion = (& $getValue 'WA_GRAPH_API_VERSION')
         OpenAiApiKey = (& $getValue 'OPENAI_API_KEY')
         OpenAiModel = (& $getValue 'OPENAI_MODEL' 'gpt-6-astra')

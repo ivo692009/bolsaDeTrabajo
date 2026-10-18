@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <adminAllowlist updatedAt="">
+  <!-- Ejemplo de registro administrado localmente: <admin id="admin-01" enabled="true" roles="commission_admin,professional_reliability_admin" />. No agregarlo sin autorización explícita. -->
   <admins />
 </adminAllowlist>

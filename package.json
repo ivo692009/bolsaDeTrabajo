@@ -1,0 +1,16 @@
+{
+  "name": "bolsa-de-trabajo-admin-panel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Panel administrativo local para la plataforma de intermediación de servicios",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "npm run start:admin",
+    "start:admin": "powershell -NoProfile -ExecutionPolicy Bypass -File ./admin-panel/start-admin-panel.ps1 -ProjectRoot .",
+    "test": "node --test",
+    "test:admin": "node --test tests/admin-panel.integration.test.js",
+    "check": "node --check admin-panel/app.js && node --test"
+  }
+}

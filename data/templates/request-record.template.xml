@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<request id="request-id" requestCode="CODE" status="connected" createdAt="" locationStatus="validated_in_area">
+<request id="request-id" requestCode="CODE" status="offered" createdAt="" locationStatus="validated_in_area">
   <client phone="" phoneCapturedAt="" />
   <serviceLocation rawAddress="" normalizedAddress="" validatedAreaId="" geocodedAt="" />
   <privacyRetention closedAt="" anonymizeAfter="" anonymizedAt="" policy="90_days_after_request_closed" />
-  <professional id="professional-id" whatsappE164="" response="accepted" />
-  <agreement status="confirmed">
+  <professional id="professional-id" whatsappE164="" response="pending" offerCode="" offerExpiresAt="" respondedAt="" />
+  <agreement status="pending_confirmation">
     <serviceItems>
-      <service id="work-item-01" description="Descripción del trabajo" laborAmount="" currency="ARS" status="confirmed" />
+      <service id="work-item-01" description="Descripción del trabajo" laborAmount="" currency="ARS" status="pending_confirmation" />
     </serviceItems>
-    <laborSubtotal amount="" currency="ARS" confirmedByClient="true" confirmedByProfessional="true" confirmedAt="" />
+    <laborSubtotal amount="" currency="ARS" confirmedByClient="false" confirmedByProfessional="false" confirmedAt="" />
     <duration unit="minutes" agreedDurationMinutes="" status="pending_confirmation" confirmedByClientAt="" confirmedByProfessionalAt="" agreedAt="" />
   </agreement>
   <workTiming status="pending_start_confirmation" startProposedAt="" startedAt="" expectedCompletionAt="" completedAt="" elapsedMinutes="">
@@ -21,5 +21,7 @@
     <client outcome="pending" confirmedAt="" />
     <professional outcome="pending" confirmedAt="" />
   </completion>
+  <analytics offeredAt="" connectedAt="" formalizedAt="" startedAt="" completedAt="" closedAt="" closureReason="" closureReasonDetail="" />
+  <commission status="not_due" rate="0.05" amountDue="" currency="ARS" proofSubmittedAt="" evidencePath="" paidByAdminReview="false" bankDepositVerified="false" reviewedAt="" reviewerAllowlistId="" decision="" decisionReason="" />
   <nonCompletionCase status="not_applicable" agreedAt="" reportedAt="" reviewedAt="" reviewerAllowlistId="" outcome="" attributedParty="" reason="" suspensionId="" />
 </request>

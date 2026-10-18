@@ -751,26 +751,39 @@ function Invoke-OfferResponse {
         return 'La oferta no puede confirmarse porque su ubicación todavía no está validada dentro del área de servicio.'
     }
     $accepted = $action -in @('aceptar', 'acepto')
+    $responseAt = [DateTime]::UtcNow.ToString('o')
+    $analytics = $request.SelectSingleNode('analytics')
+    if ($null -eq $analytics) { $analytics = $requests.CreateElement('analytics'); [void]$request.AppendChild($analytics) }
+    if (-not $analytics.GetAttribute('offeredAt')) {
+        $offerEvent = @($request.SelectNodes('timeline/event') | Where-Object { $_.GetAttribute('status') -eq 'offered' -or $_.GetAttribute('type') -eq 'professional_referred' } | Sort-Object { $_.GetAttribute('at') } | Select-Object -First 1)
+        if ($offerEvent.Count -and $offerEvent[0].GetAttribute('at')) { $analytics.SetAttribute('offeredAt', $offerEvent[0].GetAttribute('at')) }
+        elseif ($request.GetAttribute('createdAt')) { $analytics.SetAttribute('offeredAt', $request.GetAttribute('createdAt')) }
+    }
     if ($accepted) {
         $clientNumber = ConvertTo-WhatsAppE164 $request.client.phone
         if ($clientNumber -and (Get-MessagingPreference -SenderE164 $clientNumber).Status -eq 'opted_out') {
             return 'No puedo completar la conexión porque el Cliente desactivó los mensajes automatizados. No se compartieron datos de contacto.'
         }
         $request.professional.SetAttribute('response', 'accepted')
-        $request.professional.SetAttribute('respondedAt', [DateTime]::UtcNow.ToString('o'))
+        $request.professional.SetAttribute('respondedAt', $responseAt)
         $request.SetAttribute('status', 'connected')
+        $analytics.SetAttribute('connectedAt', $responseAt)
         $result = 'accepted'
     }
     else {
         $request.professional.SetAttribute('response', 'rejected')
-        $request.professional.SetAttribute('respondedAt', [DateTime]::UtcNow.ToString('o'))
+        $request.professional.SetAttribute('respondedAt', $responseAt)
         $request.SetAttribute('status', 'rejected')
+        $analytics.SetAttribute('closedAt', $responseAt)
+        $analytics.SetAttribute('closureReason', 'professional_rejected')
         $result = 'rejected'
     }
     $requestEvent = $requests.CreateElement('event')
+    $requestEvent.SetAttribute('type', $(if ($accepted) { 'professional_connected' } else { 'professional_rejected' }))
     $requestEvent.SetAttribute('status', $result)
-    $requestEvent.SetAttribute('at', [DateTime]::UtcNow.ToString('o'))
+    $requestEvent.SetAttribute('at', $responseAt)
     $requestEvent.SetAttribute('actor', $SenderE164)
+    if (-not $accepted) { $requestEvent.SetAttribute('reason', 'professional_rejected') }
     [void]$request.timeline.AppendChild($requestEvent)
     Save-XmlAtomically -Document $requests -Path $requestsPath
 
@@ -1108,6 +1121,21 @@ try {
         $context = $listener.GetContext()
         try {
             $request = $context.Request
+            if ($request.Url.AbsolutePath -eq '/health' -and $request.HttpMethod -eq 'GET') {
+                $health = [pscustomobject]@{
+                    service = 'whatsapp-bot'
+                    status = 'running'
+                    enabled = $true
+                    configured = $true
+                    port = $Port
+                    phoneNumber = $script:RuntimeConfiguration.DisplayPhoneNumber
+                    phoneNumberSource = $script:RuntimeConfiguration.DisplayPhoneNumberSource
+                } | ConvertTo-Json -Compress
+                $context.Response.Headers['Cache-Control'] = 'no-store'
+                $context.Response.Headers['X-Content-Type-Options'] = 'nosniff'
+                Send-HttpResponse -Response $context.Response -StatusCode 200 -Body $health -ContentType 'application/json; charset=utf-8'
+                continue
+            }
             if ($request.Url.AbsolutePath -ne '/webhook') {
                 Send-HttpResponse -Response $context.Response -StatusCode 404 -Body 'Not found'
                 continue

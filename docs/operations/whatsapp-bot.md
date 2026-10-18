@@ -25,6 +25,7 @@ El módulo `src/whatsapp/runtime-config.ps1` resuelve la configuración en un ú
 - `META_BUSINESS_ID`: ID del negocio mostrado en la configuración de Meta (solo referencia).
 - `WA_BUSINESS_ACCOUNT_ID`: ID de la cuenta de WhatsApp Business (solo referencia).
 - `WA_TEST_PHONE_NUMBER`: número de prueba asignado por Meta.
+- `WA_DISPLAY_PHONE_NUMBER`: número que se muestra en el panel local; en producción informa el número empresarial verificado. Si se omite, el panel muestra el número de prueba de Meta cuando está configurado.
 - `WA_APP_SECRET`: App Secret de la aplicación Meta; se usa para verificar la firma del webhook.
 - `WA_PREFERENCES_HMAC_KEY`: clave aleatoria de 32 bytes codificada como 64 caracteres hexadecimales para seudonimizar las preferencias `BAJA`; mantenla estable aunque rotes el App Secret de Meta.
 - `WA_VERIFY_TOKEN`: valor aleatorio elegido por el administrador para el handshake del webhook. Debe coincidir en Meta y en el proceso.
@@ -68,6 +69,8 @@ Los IDs y el número de prueba se cargaron en el `.env` local. **El token que ap
 El listener se enlaza solo a `127.0.0.1`; no lo expongas directamente a Internet. El proxy debe terminar TLS, preservar el path `/webhook` y limitar tamaño y tasa de solicitudes.
 
 ## Qué responde el MVP
+
+El panel local de revisiones se inicia por separado con `.\admin-panel\start-admin-panel.ps1`; roles, bandejas, acciones y límites están en [admin-panel/README.md](../../admin-panel/README.md). El panel no expone una API externa y requiere la allowlist local. Detén el webhook antes de editar los mismos XML desde el panel para evitar escrituras concurrentes.
 
 - `hola`, `menu` o `ayuda`: opciones disponibles.
 - `buscar instalar luminaria en Rawson`: exige rubro/tarea específicos y muestra perfiles publicados, disponibles, con horario/zona válidos y esa tarea declarada; no muestra teléfonos.

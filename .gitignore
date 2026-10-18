@@ -12,3 +12,8 @@ storage/gallery/*
 !storage/gallery/README.md
 storage/evidence/commission-payments/*
 !storage/evidence/commission-payments/README.md
+
+# Node tooling output
+node_modules/
+npm-debug.log*
+coverage/

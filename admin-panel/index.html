@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Panel de revisiones · Bolsa de Trabajo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">Bolsa <span>·</span> Revisiones</a>
+    <nav class="page-tabs" aria-label="Secciones del panel">
+      <span class="page-tab-group"><button class="page-tab selected" data-page="homePage" type="button">Inicio</button><button class="help-tip" type="button" aria-label="Ayuda: Inicio" aria-describedby="tip-home"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-home" role="tooltip">Resumen histórico de derivaciones, resultados y revisiones pendientes.</span></button></span>
+      <span class="page-tab-group"><button class="page-tab" data-page="reviewsPage" type="button">Revisiones</button><button class="help-tip" type="button" aria-label="Ayuda: Revisiones" aria-describedby="tip-reviews"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-reviews" role="tooltip">Bandejas para analizar casos manuales. Abre una categoría para ver su listado y revisar cada caso.</span></button></span>
+      <span class="page-tab-group"><button class="page-tab" data-page="analyticsPage" type="button">Métricas</button><button class="help-tip" type="button" aria-label="Ayuda: Métricas" aria-describedby="tip-metrics"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-metrics" role="tooltip">Indicadores de actividad en el período seleccionado. Las fechas sin registro se excluyen.</span></button></span>
+      <span class="page-tab-group"><button class="page-tab" data-page="servicePage" type="button">Servicio del bot</button><button class="help-tip" type="button" aria-label="Ayuda: Servicio del bot" aria-describedby="tip-service"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-service" role="tooltip">Estado de configuración y ejecución local, junto con el número reportado.</span></button></span>
+    </nav>
+    <div class="top-actions">
+      <span id="connection" class="connection"><i></i> Conectando</span>
+      <button id="refresh" class="button button-quiet" type="button">Actualizar</button>
+    </div>
+  </header>
+  <main class="shell">
+    <section id="homePage" class="page-content">
+      <div class="welcome"><div><p class="eyebrow">Resumen general</p><h1>Inicio</h1><p class="muted">Actividad histórica registrada y revisiones manuales pendientes.</p></div></div>
+      <section class="analytics-metrics overview-metrics" aria-label="Resumen histórico">
+        <article class="metric"><span>Derivaciones registradas</span><strong id="overviewReferrals">—</strong></article>
+        <article class="metric"><span>Conexiones logradas</span><strong id="overviewConnected">—</strong></article>
+        <article class="metric"><span>Solicitudes acordadas</span><strong id="overviewFormalized">—</strong></article>
+        <article class="metric"><span>Trabajos terminados</span><strong id="overviewCompleted">—</strong></article>
+        <article class="metric"><span>No concretadas</span><strong id="overviewNotMaterialized">—</strong></article>
+        <article class="metric"><span>Revisiones pendientes</span><strong id="overviewPendingReviews">—</strong></article>
+      </section>
+      <p id="overviewNote" class="analytics-note" role="status">Consultando los registros históricos disponibles.</p>
+      <div class="chart-grid overview-charts">
+        <section class="chart-card"><div class="chart-heading"><div><h2>Actividad histórica</h2><p class="muted">Volumen agrupado por año o mes según el período disponible.</p></div></div><div id="overviewActivityChart" class="chart-area"></div></section>
+        <section class="chart-card"><div class="chart-heading"><div><h2>Motivos de no concreción</h2><p class="muted">Distribución acumulada de las solicitudes cerradas sin éxito.</p></div></div><div id="overviewReasonChart" class="reason-chart"></div></section>
+        <section class="chart-card"><div class="chart-heading"><div><h2>Revisiones manuales pendientes</h2><p class="muted">Casos abiertos agrupados por categoría.</p></div></div><div id="overviewReviewChart" class="reason-chart"></div></section>
+      </div>
+    </section>
+    <section id="reviewsPage" class="page-content" hidden>
+    <section class="welcome">
+      <div><p class="eyebrow">Administración local</p><h1>Revisiones pendientes</h1><p class="muted">Decisiones manuales con motivo y registro de auditoría.</p></div>
+      <button id="newCase" class="button button-primary" type="button">＋ Registrar revisión</button>
+    </section>
+    <section class="metrics" aria-label="Resumen">
+      <article class="metric"><span>Pendientes</span><strong id="metricPending">—</strong></article>
+      <article class="metric"><span>Transferencias</span><strong id="metricPayments">—</strong></article>
+      <article class="metric"><span>Confiabilidad y fraude</span><strong id="metricTrust">—</strong></article>
+      <article class="metric"><span>Borrado / cambios</span><strong id="metricProfile">—</strong></article>
+    </section>
+    <div class="review-tabs" role="tablist" aria-label="Categorías de revisiones">
+      <span class="review-tab-item" role="presentation"><button class="review-tab" role="tab" aria-selected="false" data-filter="payments" type="button"><span>Transferencias</span><b id="countPayments">0</b></button><button class="help-tip" type="button" aria-label="Ayuda: Transferencias" aria-describedby="tip-payments"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-payments" role="tooltip">Comprobantes de pago de comisión pendientes de confirmar o rechazar.</span></button></span>
+      <span class="review-tab-item" role="presentation"><button class="review-tab selected" role="tab" aria-selected="true" data-filter="reliability" type="button"><span>Trabajos y cancelaciones</span><b id="countReliability">0</b></button><button class="help-tip" type="button" aria-label="Ayuda: Trabajos y cancelaciones" aria-describedby="tip-reliability"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-reliability" role="tooltip">Incumplimientos, disputas y patrones de cancelación que requieren una decisión.</span></button></span>
+      <span class="review-tab-item" role="presentation"><button class="review-tab" role="tab" aria-selected="false" data-filter="fraud" type="button"><span>Fraude y altas</span><b id="countFraud">0</b></button><button class="help-tip" type="button" aria-label="Ayuda: Fraude y altas" aria-describedby="tip-fraud"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-fraud" role="tooltip">Reportes de posible fraude y vínculos con perfiles previamente desactivados.</span></button></span>
+      <span class="review-tab-item" role="presentation"><button class="review-tab" role="tab" aria-selected="false" data-filter="profiles" type="button"><span>Perfiles</span><b id="countProfiles">0</b></button><button class="help-tip" type="button" aria-label="Ayuda: Perfiles" aria-describedby="tip-profiles"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-profiles" role="tooltip">Cambios de número y solicitudes de borrado. También contiene los controles de estado y suspensión.</span></button></span>
+      <span class="review-tab-item" role="presentation"><button class="review-tab" role="tab" aria-selected="false" data-filter="services" type="button"><span>Servicios</span><b id="countServices">0</b></button><button class="help-tip" type="button" aria-label="Ayuda: Servicios" aria-describedby="tip-services"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-services" role="tooltip">Actividades o categorías profesionales que requieren revisión de política.</span></button></span>
+      <span class="review-tab-item" role="presentation"><button class="review-tab" role="tab" aria-selected="false" data-filter="resolved" type="button"><span>Resueltas</span></button><button class="help-tip" type="button" aria-label="Ayuda: Resueltas" aria-describedby="tip-resolved"><span aria-hidden="true">?</span><span class="help-tooltip" id="tip-resolved" role="tooltip">Decisiones manuales registradas recientemente, con su resultado y revisor.</span></button></span>
+    </div>
+    <div class="workspace">
+      <aside class="sidebar" hidden>
+        <section class="quick-box">
+          <p class="eyebrow">Estado de perfiles</p>
+          <label for="profileSelect">Perfil</label><select id="profileSelect"><option value="">Selecciona un perfil</option></select>
+          <label for="suspensionRequest">ID de solicitud para suspensión</label><input id="suspensionRequest" maxlength="100" placeholder="Requerido para contar el caso">
+          <label for="suspensionReason">Motivo</label><textarea id="suspensionReason" rows="2" placeholder="Motivo documentado"></textarea>
+          <div class="quick-actions"><button id="suspend" class="button button-danger" type="button">Suspender 60 días</button><button id="reactivate" class="button button-quiet" type="button">Reactivar</button></div>
+        </section>
+        <p class="side-note">Solo uso local. La suspensión no cancela trabajos ya aceptados.</p>
+      </aside>
+      <section class="queue-panel">
+        <div class="queue-heading"><div><h2 id="queueTitle">Todas las revisiones</h2><p id="queueDescription" class="muted">Ordenadas desde las más antiguas.</p></div><span id="queueCount" class="pill">0</span></div>
+        <div id="queue" class="queue" aria-live="polite"></div>
+      </section>
+      <section id="detail" class="detail-panel empty-detail"><div class="empty-icon">✓</div><h2>Selecciona una revisión</h2><p class="muted">Aquí verás el detalle, la evidencia disponible y las decisiones permitidas para tu rol.</p></section>
+    </div>
+    </section>
+    <section id="analyticsPage" class="page-content" hidden>
+      <div class="welcome"><div><p class="eyebrow">Actividad de solicitudes</p><h1>Métricas del servicio</h1><p class="muted">Cada cifra usa la fecha del hito que mide. Los motivos solo filtran las solicitudes no concretadas.</p></div></div>
+      <div class="analytics-filters">
+        <div class="filter-intro"><span class="filter-title">Período de análisis</span><p>El período se aplica a los indicadores y a ambos gráficos.</p></div>
+        <div class="period-control"><label for="timeWindow">Período</label><select id="timeWindow"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option><option value="90">Últimos 90 días</option><option value="custom">Elegir fechas</option></select></div>
+        <div id="customDateRange" class="custom-date-range" hidden><div><label for="fromDate">Desde</label><input id="fromDate" type="date"></div><span aria-hidden="true">→</span><div><label for="toDate">Hasta</label><input id="toDate" type="date"></div></div>
+        <button id="applyAnalytics" class="button button-primary" type="button">Actualizar métricas</button>
+      </div>
+      <p id="analyticsNote" class="analytics-note" role="status"></p>
+      <section class="analytics-metrics" aria-label="Indicadores del período">
+        <article class="metric"><span>Derivaciones a profesionales</span><strong id="metricReferrals">—</strong></article>
+        <article class="metric"><span>Conexiones logradas</span><strong id="metricConnected">—</strong></article>
+        <article class="metric"><span>Solicitudes concretadas</span><strong id="metricFormalized">—</strong></article>
+        <article class="metric"><span>Terminadas exitosamente</span><strong id="metricCompleted">—</strong></article>
+        <article class="metric"><span>No concretadas</span><strong id="metricNotMaterialized">—</strong></article>
+      </section>
+      <div class="chart-grid">
+        <section class="chart-card"><div class="chart-heading"><div><h2>Evolución de solicitudes</h2><p class="muted">Comparación por día, semana o mes según el período elegido.</p></div></div><div id="activityChart" class="chart-area"></div></section>
+        <section class="chart-card"><div class="chart-heading"><div><h2>Solicitudes no concretadas</h2><p class="muted">Distribución por motivo en la ventana elegida.</p></div></div><div id="reasonChart" class="reason-chart"></div></section>
+      </div>
+    </section>
+    <section id="servicePage" class="page-content" hidden>
+      <div class="welcome"><div><p class="eyebrow">Estado de ejecución</p><h1>Servicio del bot</h1><p class="muted">Estado comprobado desde este equipo. No se muestran credenciales de Meta.</p></div><button id="refreshService" class="button button-quiet" type="button">Consultar estado</button></div>
+      <section class="service-card">
+        <div id="serviceStatusIcon" class="service-status-icon offline">●</div>
+        <div class="service-main"><p class="eyebrow">WhatsApp Cloud API</p><h2 id="serviceStatusTitle">Consultando…</h2><p id="serviceStatusDescription" class="muted">Leyendo el estado local del proceso.</p></div>
+        <span id="serviceStatusBadge" class="service-badge">—</span>
+      </section>
+      <section class="service-details">
+        <article class="metric"><span>Número reportado por configuración</span><strong id="servicePhoneNumber">No informado</strong><p id="servicePhoneSource" class="muted">No se pudo identificar el origen del número.</p></article>
+        <article class="metric"><span>Puerto local</span><strong id="servicePort">—</strong><p class="muted">Listener del webhook en 127.0.0.1.</p></article>
+        <article class="metric"><span>Configuración</span><strong id="serviceConfigured">—</strong><p id="serviceConfigNote" class="muted">Las credenciales nunca se incluyen en esta pantalla.</p></article>
+      </section>
+      <p id="serviceCheckedAt" class="analytics-note"></p>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="caseDialog" class="dialog">
+    <form id="caseForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">Nueva revisión</p><h2>Registrar un caso</h2></div><button class="icon-button" value="cancel" aria-label="Cerrar">×</button></div>
+      <label for="caseType">Tipo</label><select id="caseType" required>
+        <option value="repeated_cancellations">Cancelaciones reiteradas</option><option value="fraud_report">Reporte de posible fraude</option><option value="onboarding_linkage">Vínculo con perfil desactivado</option><option value="prohibited_service">Servicio posiblemente prohibido</option><option value="phone_change">Cambio de número</option><option value="commission_payment">Comprobante de transferencia</option><option value="non_completion">Trabajo no completado</option>
+      </select>
+      <label for="caseTitle">Título</label><input id="caseTitle" maxlength="120" required placeholder="Resumen breve y neutral">
+      <div class="form-row"><div><label for="caseProfessional">ID del profesional</label><input id="caseProfessional" maxlength="100"></div><div><label for="caseRequest">ID de solicitud</label><input id="caseRequest" maxlength="100"></div></div>
+      <label for="caseSummary">Hechos / contexto</label><textarea id="caseSummary" rows="4" maxlength="2000" placeholder="Separar hechos verificables de alegaciones. No incluir teléfonos ni domicilios."></textarea>
+      <div class="form-row"><div><label for="reviewer">Revisor autorizado</label><select id="reviewer" required></select></div><div><label for="caseAmount">Importe (si aplica)</label><input id="caseAmount" inputmode="decimal" placeholder="ARS"></div></div>
+      <label for="evidencePath">Ruta relativa del comprobante (si existe)</label><input id="evidencePath" maxlength="240" placeholder="storage/evidence/commission-payments/…">
+      <p class="form-hint">El registro no prueba fraude. Las decisiones requieren un motivo y el rol correspondiente.</p>
+      <div class="dialog-actions"><button class="button button-quiet" value="cancel">Cancelar</button><button id="saveCase" class="button button-primary" type="submit">Guardar revisión</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
