@@ -49,3 +49,8 @@ Registrar de forma auditable los trabajos acordados que no se completaron, deter
 
 ## Estado de implementación
 La política y los campos de plantilla están especificados. El webhook todavía no implementa creación de solicitudes y acuerdos, revisión administrativa de estos casos, contador de sanciones ni vencimiento/reactivación automática. No presentar estas sanciones como activas hasta implementar los flujos y el planificador.
+
+## Seguimiento de calidad
+- Medir por separado reportes, alertas, casos elegibles, atribuciones, inconclusos, sanciones, reactivaciones anticipadas y decisiones revertidas.
+- Revisar muestras de casos y motivos de apelación para detectar registros incompletos, error de atribución o diferencias de trato. La métrica no modifica umbrales ni impone sanciones automáticamente.
+- Mantener la ventana de cómputo, política y versión de regla visibles en la auditoría. Las correcciones son eventos nuevos; no sobrescribir decisiones históricas.

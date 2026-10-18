@@ -36,6 +36,12 @@ Rechazar tareas cuyo objeto sea promover, facilitar, proveer medios o ejecutar:
 - Comunicar una decisión concreta y neutral: qué tarea no puede publicarse y cómo corregir el perfil o pedir revisión. No etiquetar públicamente al profesional como delincuente.
 - No solicitar documentos de identidad, credenciales bancarias ni detalles innecesarios por WhatsApp para esta evaluación.
 
+## Calidad del criterio
+- Medir tareas detenidas, aclaraciones, revisiones humanas, autorizaciones tras aclarar, apelaciones y decisiones revertidas. Revisar especialmente falsos positivos por alias, contexto educativo/sanitario, reparaciones legales y servicios autorizados.
+- Cada ampliación debe tener versión, fecha, motivo, ejemplos de uso prohibido y usos lícitos cercanos que no deben bloquearse. No convertir coincidencias de palabras en listas negras globales.
+- Aplicar los criterios a la actividad declarada y su propósito concreto, no a atributos de la persona, barrio, nacionalidad, identidad ni reputación no corroborada.
+- Si una regla nueva cambia una decisión de acceso, someterla a revisión humana antes de aplicarla; conservar la versión previa para auditar y reconsiderar casos.
+
 ## Restricciones
 - El bot puede identificar una coincidencia clara y detener la publicación de la tarea; no determina culpabilidad penal ni sanciona a la persona.
 - Los casos ambiguos y las decisiones de vinculación/legalidad requieren revisión humana; no rechazar un perfil entero por una palabra, alias o denuncia aislada.
@@ -47,3 +53,6 @@ Las tareas claramente prohibidas no se publican; las ambiguas quedan pendientes 
 
 ## Historial incremental
 - 2026-10-17: versión inicial; incluye drogas ilícitas, explotación sexual/trata, armas ilícitas, violencia, contrabando, estafas y facilitación de otros delitos.
+
+## Estado de implementación
+La política está documentada y el panel permite registrar algunos casos manuales. El webhook no aplica todavía un filtro automático a altas, edición o publicación; una regla escrita no significa que el sistema haya bloqueado el servicio.

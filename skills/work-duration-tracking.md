@@ -1,4 +1,4 @@
-# Skill 17: Acuerdo y seguimiento de duración del trabajo
+# Skill 15: Acuerdo y seguimiento de duración del trabajo
 
 ## Objetivo
 Registrar el plazo que acuerdan Cliente y Profesional, medir el tiempo real de trabajo y consultar a ambas partes al llegar la fecha prevista de finalización.

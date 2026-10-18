@@ -8,11 +8,15 @@ Nombre de la skill.
 
 Describe el problema que resuelve esta skill y el resultado esperado.
 
-## 3. Usuario objetivo
+## 3. Estado y dependencias
+
+Indica qué partes están implementadas, cuáles son política futura y qué datos, permisos, servicios o configuración requiere. No describas una propuesta como función activa.
+
+## 4. Usuario objetivo
 
 Indica quién la utilizará y en qué contexto.
 
-## 4. Entrada
+## 5. Entrada
 
 Lista los datos que recibe la skill:
 
@@ -21,7 +25,7 @@ Lista los datos que recibe la skill:
 - contexto
 - historial o información adicional
 
-## 5. Proceso
+## 6. Proceso
 
 Explica la lógica interna:
 
@@ -31,11 +35,13 @@ Explica la lógica interna:
 4. Generar respuesta o acción.
 5. Verificar cumplimiento de restricciones.
 
-## 6. Salida esperada
+Incluye resultados para entradas incompletas o ambiguas, identidad/permiso no válido, datos corruptos, dependencia fuera de servicio y persistencia fallida. Especifica cuándo preguntar, reintentar, dejar pendiente o escalar.
+
+## 7. Salida esperada
 
 Describe la respuesta, estructura o acciones recomendadas.
 
-## 7. Restricciones
+## 8. Restricciones
 
 Define limites del comportamiento:
 
@@ -43,11 +49,13 @@ Define limites del comportamiento:
 - no revelar datos sin permiso
 - no ejecutar acciones no autorizadas
 
-## 8. Casos de uso
+## 9. Casos de uso y límites
 
 Incluye al menos 2 ejemplos reales o hipotéticos.
 
-## 9. Métricas de éxito
+Incluye al menos un caso normal, uno ambiguo y uno de fallo; explica también qué casos quedan fuera de esta skill.
+
+## 10. Métricas de éxito
 
 Ejemplo:
 
@@ -55,3 +63,9 @@ Ejemplo:
 - cumplimiento de la política
 - tiempo de respuesta
 - tasa de escalamiento manual
+
+Mide seguridad y calidad además de volumen: acciones duplicadas, falsos positivos, decisiones revertidas, fallos sin estado claro y solicitudes de revisión pendientes. No optimices una métrica a costa de privacidad o de decisiones injustas.
+
+## 11. Historial
+
+Registra fecha, cambio y motivo. No borres definiciones anteriores: márcalas como superadas y agrega la versión corregida.

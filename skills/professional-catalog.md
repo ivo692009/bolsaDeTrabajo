@@ -36,3 +36,6 @@ Administrar el catálogo local de profesionales en XML, manteniendo datos estruc
 
 ## Resultado esperado
 Registro XML local válido, o una pregunta concreta por los datos obligatorios que faltan. El bot confirma el alta solo después de persistirla.
+
+## Estado de implementación
+La consulta y algunas modificaciones autenticadas de perfiles están disponibles; el alta conversacional y la administración completa del catálogo siguen pendientes. No afirmar que un alta o cambio se guardó sin verificar el XML persistido.

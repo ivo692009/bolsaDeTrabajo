@@ -28,3 +28,6 @@ Coordinar una solicitud de trabajo y conectar al cliente con un profesional solo
 
 ## Resultado esperado
 Solicitud trazable con estado actualizado y, únicamente tras aceptación, contacto habilitado entre ambas partes.
+
+## Estado de implementación
+La búsqueda determinista, las respuestas a ofertas existentes y la conexión tras aceptación válida están disponibles en el webhook; la creación de solicitudes/ofertas nuevas y el flujo completo de acuerdo no están implementados. No crear una solicitud simulada.

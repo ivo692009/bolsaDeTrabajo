@@ -25,6 +25,12 @@ Revisar nuevas altas profesionales y reportes de posible fraude, impedir duplica
 - No duplicar teléfonos, direcciones u otros datos personales en notas. Respetar plazos de retención y solicitudes de borrado; un tombstone identificable solo puede conservarse si la política de retención aplicable lo autoriza y limita acceso/uso a prevenir re-registros.
 - No usar reconocimiento facial, búsqueda externa de identidad, perfilado por atributos sensibles ni señales de dispositivo como prueba de identidad o fraude.
 
+## Calidad y revisión de decisiones
+- Mantener separadas las métricas de reportes recibidos, hallazgos corroborados, decisiones inconclusas, altas autorizadas tras revisión y decisiones apeladas o revertidas. No optimizar por cantidad de rechazos.
+- Revisar periódicamente falsos positivos y tiempos de espera de la cola; actualizar los criterios de forma aditiva, indicando versión, motivo y fecha.
+- Comparar solo señales pertinentes y permitidas. No usar atributos protegidos o proxies sensibles para priorizar, bloquear o puntuar solicitantes.
+- Permitir aportar contexto y pedir revisión de una decisión adversa mediante un canal realmente disponible; no prometer una apelación automatizada si no está implementada.
+
 ## Restricciones
 - El chatbot puede explicar el proceso, reunir un reporte y derivarlo; no determina fraude, bloquea altas ni sanciona.
 - La comparación de nombre, redes o teléfono es una señal de revisión, no prueba concluyente de identidad.
@@ -33,3 +39,6 @@ Revisar nuevas altas profesionales y reportes de posible fraude, impedir duplica
 
 ## Resultado esperado
 Alta aprobada, rechazada con motivo revisable o pendiente de revisión; y reportes de posible fraude tratados con trazabilidad, privacidad y decisión humana, sin presentar sospechas como hechos.
+
+## Estado de implementación
+La verificación de perfiles previos, el control de altas con otro número y la captura/revisión de reportes no están implementados en el webhook. No afirmar que una evasión fue detectada o bloqueada; el panel admite el registro manual de algunos tipos de caso.

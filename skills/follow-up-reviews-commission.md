@@ -21,3 +21,6 @@ Cerrar el ciclo de una solicitud, recopilar comentarios y registrar la comisión
 
 ## Resultado esperado
 Seguimiento oportuno, reseña asociada a una solicitud concluida y derivación al proceso de comisión solo tras confirmar la finalización correcta.
+
+## Estado de implementación
+No está implementado el planificador de consultas, reintentos, reseñas ni cierre automático. Registrar datos retrospectivos solo cuando haya evidencia; no inferir fechas o hitos faltantes.

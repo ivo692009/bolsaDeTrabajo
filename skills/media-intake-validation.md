@@ -23,3 +23,6 @@ Guardar fotos de trabajos y comprobantes de transferencia de forma segura, evita
 
 ## Resultado esperado
 Archivo validado y guardado en su ubicación privada o pública correspondiente, con referencia trazable; si falla cualquier verificación, no se usa ni se confirma su recepción.
+
+## Estado de implementación
+La recepción y descarga de imágenes por el webhook no están implementadas. La existencia de directorios de almacenamiento no equivale a un flujo de carga o validación activo.

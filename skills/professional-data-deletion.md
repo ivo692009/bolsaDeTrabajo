@@ -1,4 +1,4 @@
-# Skill 18: Solicitud de borrado de datos del profesional
+# Skill 16: Solicitud de borrado de datos del profesional
 
 ## Objetivo
 Permitir que un profesional solicite la eliminación de sus datos y requerir decisión manual de un administrador autenticado mediante allowlist.
@@ -26,3 +26,6 @@ Permitir que un profesional solicite la eliminación de sus datos y requerir dec
 
 ## Resultado esperado
 Solicitud trazable en estado `pending_admin_review`, `rejected` o `approved_anonymized`, revisada por un administrador autenticado y sin exponer el número del solicitante en la cola.
+
+## Estado de implementación
+La solicitud por WhatsApp y su flujo completo de aprobación/anonimización no están implementados en el webhook. El panel local sí puede revisar ciertas solicitudes ya presentes en XML; seguir sus precondiciones y no prometer borrado automático ni purga de respaldos.

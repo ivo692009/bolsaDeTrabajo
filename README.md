@@ -46,7 +46,7 @@ npm test        # Ejecuta pruebas de integración del panel
 npm run check   # Valida la sintaxis JavaScript y ejecuta las pruebas
 ```
 
-Las pruebas de integración están en `tests/admin-panel.integration.test.js`; utilizan datos y runtime temporales, separados de los registros locales.
+Las pruebas de integración están bajo `tests/`; utilizan datos y runtime temporales, separados de los registros locales. `npm test` verifica también consistencia de enlaces e índice de skills.
 
 ## Estado del MVP
 

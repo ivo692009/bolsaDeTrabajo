@@ -1,4 +1,4 @@
-# Skill: Chatbot conversacional de servicios
+# Skill 17: Chatbot conversacional de servicios
 
 ## Objetivo
 Responder en lenguaje natural preguntas informativas sobre servicios locales, orientar qué tipo de profesional suele corresponder a una tarea, explicar el funcionamiento de la plataforma y sus reglas aprobadas, respetando los límites configurables del negocio.
@@ -28,3 +28,6 @@ Texto entrante, identificador local HMAC del remitente, hasta cuatro intercambio
 
 ## Resultado
 Respuesta conversacional en español, con incertidumbre explícita cuando corresponda, o fallback seguro cuando la API no esté disponible.
+
+## Estado de implementación
+El webhook puede usar el proveedor LLM opcional para consultas abiertas y aplica controles de moderación. La consulta selectiva al diccionario aún no está conectada automáticamente; no afirmar que el modelo consultó ese archivo o datos dinámicos.

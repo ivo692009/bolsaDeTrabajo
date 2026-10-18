@@ -23,3 +23,6 @@ Vincular fotos de trabajos con el profesional correspondiente y compartir refere
 
 ## Resultado esperado
 Referencias pertinentes y autorizadas listas para compartir, o una explicación breve si no hay material disponible.
+
+## Estado de implementación
+El flujo de recepción y envío de fotos no está implementado. No afirmar que una imagen se guardó, autorizó o envió hasta verificar la operación real.

@@ -4,6 +4,7 @@ skill:
   name: "Nombre de la skill"
   owner: "Equipo o persona responsable"
   status: "draft"
+  implementation_status: "not_implemented"
   description: "Descripción breve de la finalidad de la skill."
   purpose: "Qué problema resuelve y para qué tipo de usuario."
 
@@ -12,6 +13,11 @@ skill:
     conditions:
       - "Se activa cuando el usuario solicita una acción específica."
       - "También puede dispararse por evento o llamada externa."
+
+  dependencies:
+    - name: "Fuente o permiso requerido"
+      required: true
+      failure_behavior: "Detener la acción protegida y escalar sin inventar un resultado."
 
   inputs:
     - name: "usuario"
@@ -46,6 +52,13 @@ skill:
     - "No des recomendaciones fuera del alcance del proyecto."
     - "No asumas decisiones sin validar los datos disponibles."
 
+  failure_handling:
+    ambiguous_input: "Solicitar el dato mínimo que resuelve la ambigüedad."
+    missing_or_invalid_data: "No ejecutar la acción; explicar el siguiente paso disponible."
+    dependency_unavailable: "Aplicar fallback seguro o dejar pendiente; no simular éxito."
+    persistence_uncertain: "Consultar estado/idempotencia antes de reintentar."
+    escalation: "Indicar rol responsable, hechos mínimos e identificadores internos; excluir secretos y datos innecesarios."
+
   examples:
     - input:
         usuario: "cliente_001"
@@ -61,3 +74,10 @@ skill:
       - "La respuesta es útil y clara para el usuario."
       - "La salida cumple con reglas y restricciones del negocio."
       - "Se solicita información faltante cuando es necesario."
+      - "Un reintento no duplica efectos y los estados comunicados son verificables."
+      - "Los falsos positivos, reversas y fallos quedan medibles y revisables."
+
+  changelog:
+    - date: "YYYY-MM-DD"
+      change: "Creación o mejora"
+      reason: "Motivo del cambio"

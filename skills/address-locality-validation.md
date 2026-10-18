@@ -27,3 +27,6 @@ Validar que una dirección escrita por cliente o profesional corresponda al áre
 
 ## Resultado esperado
 Una solicitud marcada como validada dentro del área de Rawson/Playa Unión, pendiente de aclaración o fuera del área; nunca una confirmación inventada.
+
+## Estado de implementación
+La integración de geocodificación y el polígono oficial no están operativos. No recopilar direcciones para este flujo ni afirmar validación hasta configurar la política geográfica, revisar retención y desplegar una integración probada.

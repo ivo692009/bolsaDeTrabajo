@@ -34,7 +34,8 @@ El módulo `src/whatsapp/runtime-config.ps1` resuelve la configuración en un ú
 - `WA_GRAPH_API_VERSION`: versión Graph actualmente soportada por la aplicación, con formato `vNN.0`.
 - `WA_OPENAI_MODERATION_TIMEOUT_SECONDS`: timeout para moderación; por defecto `12`.
 - `WA_OPENAI_RESPONSE_TIMEOUT_SECONDS`: timeout para la generación de respuestas; por defecto `25`.
-- `WA_WHATSAPP_REQUEST_TIMEOUT_SECONDS`: timeout al enviar mensajes a Meta; por defecto `20`.- `OPENAI_API_KEY`: clave API de OpenAI (opcional; si falta, las preguntas generales reciben una respuesta de disponibilidad limitada).
+- `WA_WHATSAPP_REQUEST_TIMEOUT_SECONDS`: timeout al enviar mensajes a Meta; por defecto `20`.
+- `OPENAI_API_KEY`: clave API de OpenAI (opcional; si falta, las preguntas generales reciben una respuesta de disponibilidad limitada).
 - `OPENAI_MODEL`: modelo habilitado para tu proyecto API; opcional, por defecto `gpt-6-astra`.
 
 Genera la clave HMAC de preferencias con este comando de PowerShell y copia el resultado de 64 caracteres hexadecimales a `.env`:
@@ -48,7 +49,7 @@ finally { $rng.Dispose() }
 
 La clave es obligatoria para iniciar el servicio. Guárdala junto a los otros secretos en el `.env` local o en el entorno del proceso, y conserva una copia segura: cambiarla impediría reconocer las bajas guardadas. La clave de OpenAI se lee del mismo `.env` local o del entorno del proceso; nunca la guardes en archivos versionados. La integración usa la Responses API. Requiere un proyecto API con facturación/acceso configurado y conexión saliente HTTPS desde el servidor. ChatGPT Plus/Pro no sustituye una clave de API.
 
-Los IDs y el número de prueba se cargaron en el `.env` local. **El token que apareció en la captura debe regenerarse en Meta antes de usarlo**; el `.env` deja `WA_ACCESS_TOKEN` vacío para que ingreses el nuevo token directamente en tu equipo. Completa también `WA_APP_SECRET` y genera un `WA_VERIFY_TOKEN` privado. No los pegues en conversaciones ni los guardes en archivos versionados.
+Antes de usar el servicio, verifica localmente que `WA_ACCESS_TOKEN`, `WA_APP_SECRET` y `WA_VERIFY_TOKEN` sean credenciales vigentes de tu aplicación Meta. Si algún valor fue expuesto, revócalo y rótalo. No copies credenciales a conversaciones, capturas, documentación ni archivos versionados.
 
 `config/whatsapp-bot.env.example` documenta los nombres de las variables sin valores reales.
 

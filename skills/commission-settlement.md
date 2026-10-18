@@ -32,3 +32,6 @@ Liquidar una sola comisión por trabajo completado y conservar de forma privada 
 `pending_completion` -> `due` -> `proof_submitted` -> `pending_admin_review` -> `paid` (aceptado por Administración; sin verificación bancaria automática)
 
 La revisión puede llevar a `rejected` o `inconclusive`; una cancelación acordada lleva a `waived`; el silencio tras dos reintentos lleva a `closed_unconfirmed` sin comisión y un desacuerdo lleva a `on_hold` hasta resolución. Los estados previos que no aplican se omiten.
+
+## Estado de implementación
+El flujo completo de acuerdos, finalización bilateral, recordatorios y liquidación automática no está implementado en el webhook. El panel puede revisar comprobantes cuando se cumplen las precondiciones persistidas; no iniciar el cobro solo por una conversación o una decisión de confiabilidad.
