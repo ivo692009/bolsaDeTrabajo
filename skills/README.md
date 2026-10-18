@@ -19,8 +19,14 @@ Cada archivo describe una capacidad funcional, sus entradas, acciones y restricc
 15. `work-duration-tracking.md`: duración acordada, inicio y finalización del trabajo.
 16. `professional-data-deletion.md`: solicitud de borrado y aprobación administrativa.
 17. `general-service-chatbot.md`: preguntas conversacionales con contexto editable y límites explícitos.
-18. `professional-reliability-and-suspension.md`: revisión de trabajos acordados no completados, suspensiones y desactivación de cuentas.
+18. `professional-reliability-and-suspension.md`: revisión de incumplimientos acordados, patrones reiterados de cancelación, suspensiones y desactivación de cuentas.
 19. `messaging-consent-and-data-retention.md`: baja/reconsentimiento por WhatsApp y anonimización de solicitudes cerradas.
+20. `professional-onboarding-and-fraud-review.md`: control de altas frente a perfiles previamente desactivados y revisión humana de reportes de posible fraude.
+21. `professional-prohibited-services-review.md`: evaluación incremental de tareas ilegales o dañinas antes de publicar perfiles profesionales.
+22. `professional-activity-dictionary-lookup.md`: consulta selectiva de definiciones por oficio para orientar tareas con menos contexto.
+23. `professional-activity-dictionary-maintenance.md`: ampliación acumulativa del diccionario, sin borrar definiciones previas.
+24. `professional-registration-activity-enrichment.md`: compara las tareas declaradas al alta y amplía definiciones faltantes con fuentes web verificables.
+24. `professional-registration-activity-enrichment.md`: compara las tareas declaradas al alta y amplía definiciones faltantes con fuentes web verificables.
 
 Los XML runtime de perfiles, solicitudes y allowlist se inicializan desde plantillas de `../data/templates/` y se guardan en `../runtime/data/`, excluidos de Git. El perfil usa `../data/templates/professional-profile.template.xml`; los rubros, `../data/catalog/service-categories.xml`; las zonas, `../data/policies/location-policy.xml` y `../data/templates/service-area.template.xml`. La fuente de verdad es [la especificación funcional](../docs/business/system-specification.md).
 

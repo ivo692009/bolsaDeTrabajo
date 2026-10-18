@@ -1,0 +1,211 @@
+version: 1
+language: es-AR
+updated_at: 2026-10-17
+source_of_truth: "Definiciones orientativas del proyecto; el catálogo XML determina categorías y trabajos publicados."
+definitions:
+  - id: albañil
+    role: "Albañilería / construcción"
+    summary: "Ejecuta trabajos de obra civil, mampostería, reparación y terminación de superficies."
+    activities:
+      - "levantar o reparar paredes, tabiques y cercos de mampostería"
+      - "revoques, carpetas, contrapisos y reparación de superficies"
+      - "colocación o reparación de pisos y revestimientos"
+      - "obra menor, remodelación y reparación general de albañilería"
+    clarify: "Preguntar qué elemento se construye o repara, dimensiones aproximadas y si hay intervención estructural."
+    boundary: "No asumir que realiza cálculo estructural, proyecto, instalaciones ni tareas que requieran una habilitación específica."
+    aliases: ["albañilería", "albañil", "mampostería", "obra menor", "revoque", "colocación de cerámicos"]
+    related_professions: ["durlero_yesero", "colocador_pisos_revestimientos", "techista", "pintor", "carpintero", "hormigonero", "plomero", "electricista"]
+    source_refs: ["ar_renatep_2023", "onet_masonry_2026"]
+  - id: electricista
+    role: "Electricidad"
+    summary: "Realiza instalación, mantenimiento y reparación de componentes e instalaciones eléctricas."
+    activities:
+      - "instalar o reemplazar tomas, interruptores y luminarias"
+      - "tender o reparar cableado y circuitos"
+      - "revisar fallas eléctricas y mantenimiento preventivo"
+    clarify: "Preguntar qué equipo o sector presenta el problema y si se trata de obra nueva o reparación."
+    boundary: "No dar instrucciones para intervenir instalaciones energizadas ni diagnosticar riesgos por chat; recomendar profesional habilitado y detenerse ante humo, chispas, descarga o peligro inmediato."
+    aliases: ["electricidad", "electricista", "cableado", "tomas", "luminarias", "cortocircuito"]
+    related_professions: ["técnico electrónico", "reparador_electrodomesticos", "tecnico_hvac", "instalador fotovoltaico", "instalador de ascensores"]
+    source_refs: ["ar_renatep_2023", "bls_electricians"]
+  - id: plomero
+    role: "Agua y plomería"
+    summary: "Instala y repara tuberías, griferías y otros elementos de distribución de agua y desagüe."
+    activities:
+      - "instalar o reemplazar cañerías, grifos y accesorios"
+      - "localizar y reparar fugas de agua"
+      - "reparar desagües y componentes de plomería"
+    clarify: "Preguntar si es agua o desagüe, dónde ocurre y si la fuga sigue activa."
+    boundary: "No confundir plomería de agua con instalaciones de gas; no dar instrucciones peligrosas ante inundación o contaminación."
+    aliases: ["plomería", "plomero", "fontanería", "cañería", "grifería", "fuga de agua", "desagüe"]
+    related_professions: ["gasista", "tecnico_hvac", "reparador_electrodomesticos"]
+    source_refs: ["ar_renatep_2023", "bls_plumbers_pipefitters"]
+  - id: gasista
+    role: "Gas"
+    summary: "Atiende instalación, mantenimiento y reparación de instalaciones y equipos de gas, sujeto a habilitaciones aplicables."
+    activities:
+      - "instalar o mantener cañerías y conexiones de gas"
+      - "revisar o reparar equipos e instalaciones de gas"
+      - "verificar funcionamiento dentro del alcance habilitado"
+    clarify: "Preguntar si se trata de instalación, mantenimiento o falla y qué equipo está involucrado; ante olor a gas, priorizar seguridad y emergencias locales."
+    boundary: "No diagnosticar ni describir pasos de reparación por chat. No afirmar que un profesional está matriculado o habilitado sin verificación independiente."
+    aliases: ["gasista", "gas", "instalación de gas", "artefacto a gas", "pérdida de gas"]
+    related_professions: ["tecnico_hvac", "reparador_electrodomesticos", "plomero"]
+    source_refs: ["ar_renatep_2023"]
+  - id: carpintero
+    role: "Carpintería"
+    summary: "Construye, instala, repara o ajusta estructuras y piezas de madera u otros materiales."
+    activities: ["puertas, marcos, ventanas, muebles y estanterías", "estructuras livianas, pisos de madera y molduras", "reparación o ajuste de piezas y herrajes"]
+    clarify: "Preguntar si es mueble, abertura, estructura o reparación; indicar material y medidas aproximadas."
+    boundary: "No asumir diseño estructural ni certificación de instalaciones; diferenciar carpintería de herrería y colocación de vidrio."
+    aliases: ["carpintería", "carpintero", "muebles a medida", "ebanista", "maderera"]
+    related_professions: ["ebanista", "instalador de aberturas", "colocador de pisos de madera", "herrero_soldador", "vidriero"]
+    source_refs: ["bls_carpenters"]
+  - id: pintor
+    role: "Pintura y terminaciones"
+    summary: "Prepara superficies y aplica pinturas, esmaltes, barnices u otros revestimientos de terminación."
+    activities: ["pintura interior y exterior", "preparación, lijado y reparación superficial", "barnizado y aplicación de revestimientos decorativos"]
+    clarify: "Preguntar qué superficie, interior/exterior, estado actual y tipo de terminación busca."
+    boundary: "No diagnosticar ni indicar manipulación de pinturas con plomo, solventes peligrosos o recubrimientos industriales especiales."
+    aliases: ["pintor", "pintura", "pintor de obra", "empapelador", "barnizador"]
+    related_professions: ["durlero_yesero", "albañil", "colocador_pisos_revestimientos"]
+    source_refs: ["ar_renatep_2023", "bls_painters"]
+  - id: durlero_yesero
+    role: "Construcción en seco y yesería"
+    summary: "Instala placas y cielorrasos interiores, trata juntas y realiza terminaciones con yeso o masilla."
+    activities: ["tabiques y revestimientos de placa", "cielorrasos y molduras", "encintado, tomado de juntas y reparación de superficies"]
+    clarify: "Preguntar si necesita tabique, cielorraso, revestimiento o reparación y dimensiones aproximadas."
+    boundary: "No asumir que una pared divisoria puede modificarse sin revisar estructura, servicios ocultos y permisos aplicables."
+    aliases: ["durlero", "durlock", "yesero", "yesería", "construcción en seco", "cielorraso"]
+    related_professions: ["albañil", "pintor", "colocador_pisos_revestimientos"]
+    source_refs: ["bls_drywall_tapers"]
+  - id: colocador_pisos_revestimientos
+    role: "Colocación de pisos, cerámicos y revestimientos"
+    summary: "Prepara bases y coloca terminaciones de piso o pared como cerámica, piedra, madera, vinilo o alfombra."
+    activities: ["colocación de cerámicos, mosaicos y piedra", "instalación de pisos vinílicos, laminados o alfombras", "reparación de juntas y terminaciones"]
+    clarify: "Preguntar material, superficie, medidas y si hay que retirar el revestimiento existente."
+    boundary: "No asumir que prepara o repara estructura, impermeabilización o cañerías detrás de la superficie sin confirmarlo."
+    aliases: ["colocador de cerámicos", "ceramista", "colocador de pisos", "revestimientos", "marmolero"]
+    related_professions: ["durlero_yesero", "albañil", "carpintero"]
+    source_refs: ["bls_flooring_tile_stone"]
+  - id: techista
+    role: "Techado e impermeabilización de cubiertas"
+    summary: "Instala, repara o reemplaza cubiertas y materiales para proteger techos de la intemperie."
+    activities: ["reparación de filtraciones de cubierta", "colocación o reemplazo de chapas y tejas", "membranas y terminaciones de techo"]
+    clarify: "Preguntar tipo de techo, ubicación de la filtración y si el acceso es seguro; no pedir que suba para inspeccionar."
+    boundary: "Trabajo en altura y sobre cubiertas implica riesgo; no dar instrucciones para hacerlo por cuenta propia ni afirmar que el origen de la filtración está diagnosticado."
+    aliases: ["techista", "techado", "techo", "techumbre", "membrana", "reparación de techo"]
+    related_professions: ["albañil", "carpintero", "herrero_soldador"]
+    source_refs: ["bls_roofers"]
+  - id: herrero_soldador
+    role: "Herrería y soldadura"
+    summary: "Fabrica, une, repara o ajusta piezas y estructuras metálicas mediante trabajo de metal y soldadura."
+    activities: ["rejas, portones, barandas y soportes", "reparación de piezas metálicas", "corte y unión de metales para fabricación o reparación"]
+    clarify: "Preguntar qué pieza necesita, material, dimensiones y si es fabricación nueva o reparación."
+    boundary: "No ofrecer fabricación o modificación de armas ni piezas para violencia; usar procedimientos de seguridad y habilitaciones aplicables."
+    aliases: ["herrero", "herrería", "soldador", "soldadura", "metalúrgico", "portones"]
+    related_professions: ["carpintero", "techista", "reparador de maquinaria"]
+    source_refs: ["ar_renatep_2023", "bls_welders"]
+  - id: tecnico_hvac
+    role: "Climatización, calefacción y refrigeración"
+    summary: "Instala, mantiene o repara sistemas de calefacción, ventilación, aire acondicionado o refrigeración."
+    activities: ["aire acondicionado y ventilación", "calefacción y equipos térmicos", "refrigeración doméstica o comercial"]
+    clarify: "Preguntar tipo de equipo, marca/modelo si se conoce, síntoma observado y si requiere instalación o servicio."
+    boundary: "Electricidad, refrigerantes y equipos a gas tienen riesgos y requisitos propios; no diagnosticar ni dar pasos de reparación por chat."
+    aliases: ["climatización", "aire acondicionado", "refrigeración", "calefacción", "HVAC", "frigorista"]
+    related_professions: ["electricista", "gasista", "plomero", "reparador_electrodomesticos"]
+    source_refs: ["bls_hvac"]
+  - id: jardinero_paisajista
+    role: "Jardinería y mantenimiento de espacios verdes"
+    summary: "Mantiene jardines y vegetación; algunos trabajos de paisajismo diseñan o instalan nuevos espacios exteriores."
+    activities: ["corte de césped, poda y desmalezado", "plantación, riego y mantenimiento de canteros", "diseño e instalación básica de jardines y senderos"]
+    clarify: "Preguntar tamaño del espacio, tareas puntuales, retiro de restos y si incluye diseño o solo mantenimiento."
+    boundary: "Poda de altura, tala, plaguicidas y equipos de riesgo requieren evaluación y, según la tarea, personal habilitado."
+    aliases: ["jardinero", "jardinería", "paisajista", "parquero", "mantenimiento de jardín", "poda"]
+    related_professions: ["poda y arboricultura", "instalación de riego", "mantenimiento_general", "limpieza exterior"]
+    source_refs: ["bls_grounds_maintenance"]
+  - id: mantenimiento_general
+    role: "Mantenimiento general del hogar"
+    summary: "Resuelve reparaciones menores que combinan habilidades básicas de mantenimiento y no requieren una especialidad regulada."
+    activities: ["ajustes y reparaciones menores de herrajes o mobiliario", "sellado y retoques superficiales", "montaje sencillo de elementos prefabricados"]
+    clarify: "Desglosar la tarea concreta y derivar a oficio especializado si involucra gas, electricidad, estructura, agua o riesgo."
+    boundary: "No usar la categoría para eludir la revisión o habilitación requerida por un oficio especializado; no agrupar tareas ambiguas bajo ‘arreglos’."
+    aliases: ["mantenimiento", "arreglos del hogar", "manitas", "reparaciones menores", "mantenimiento edilicio"]
+    related_professions: ["albañil", "carpintero", "electricista", "plomero", "pintor"]
+    source_refs: ["bls_general_maintenance"]
+  - id: reparador_electrodomesticos
+    role: "Reparación de electrodomésticos"
+    summary: "Inspecciona, mantiene o repara aparatos eléctricos o a gas de uso doméstico."
+    activities: ["lavarropas, heladeras y pequeños electrodomésticos", "hornos, cocinas y calefactores dentro de su alcance", "diagnóstico y reemplazo de componentes del aparato"]
+    clarify: "Preguntar aparato, marca/modelo y síntoma; precisar si involucra conexión eléctrica o de gas del domicilio."
+    boundary: "No instruir reparaciones con tensión, gas o circuitos de refrigeración; distinguir reparación del equipo de instalación de gas o eléctrica fija."
+    aliases: ["service de electrodomésticos", "reparador de heladeras", "técnico de lavarropas", "reparación de cocina"]
+    related_professions: ["electricista", "gasista", "tecnico_hvac", "tecnico_electronico"]
+    source_refs: ["bls_appliance_repair"]
+metadata:
+  update_policy: "Las definiciones son acumulativas; ampliar mediante nuevas entradas o revisiones aditivas sin borrar contenido previo."
+  safety: "Orientación de rubro y alcance general; no es diagnóstico, instrucción técnica, garantía ni verificación de credenciales."
+  changelog:
+    - date: 2026-10-17
+      entry: "albañil, electricista, plomero y gasista"
+      change: "Definiciones iniciales con actividades, preguntas de aclaración, alias y límites de orientación."
+    - date: 2026-10-17
+      entry: "oficios complementarios y profesiones afines"
+      change: "Se añadieron carpintería, pintura, construcción en seco, pisos/revestimientos, techado, herrería/soldadura, climatización, jardinería, mantenimiento general y reparación de electrodomésticos, con relaciones y fuentes institucionales."
+  sources:
+    - id: ar_renatep_2023
+      url: "https://www.argentina.gob.ar/sites/default/files/2023/08/manual_metodologico_del_renatep_abril_2023.pdf"
+      scope: "Nombres y descripciones generales de oficios en Argentina; no determina habilitación local."
+      accessed: 2026-10-17
+    - id: onet_masonry_2026
+      url: "https://www.onetonline.org/link/summary/47-2021.00"
+      scope: "Tareas generales de albañilería/mampostería."
+      accessed: 2026-10-17
+    - id: bls_carpenters
+      url: "https://www.bls.gov/ooh/construction-and-extraction/carpenters.htm"
+      scope: "Descripción general de carpintería constructiva."
+      accessed: 2026-10-17
+    - id: bls_electricians
+      url: "https://www.bls.gov/ooh/construction-and-extraction/electricians.htm"
+      scope: "Descripción general de instalación y mantenimiento eléctrico."
+      accessed: 2026-10-17
+    - id: bls_plumbers_pipefitters
+      url: "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm"
+      scope: "Tareas de plomería y sistemas de tuberías."
+      accessed: 2026-10-17
+    - id: bls_painters
+      url: "https://www.bls.gov/ooh/construction-and-extraction/painters-construction-and-maintenance.htm"
+      scope: "Pintura y revestimientos de construcción."
+      accessed: 2026-10-17
+    - id: bls_drywall_tapers
+      url: "https://www.bls.gov/ooh/construction-and-extraction/drywall-and-ceiling-tile-installers-and-tapers.htm"
+      scope: "Placas, cielorrasos y tratamiento de juntas."
+      accessed: 2026-10-17
+    - id: bls_flooring_tile_stone
+      url: "https://www.bls.gov/ooh/construction-and-extraction/tile-and-marble-setters.htm"
+      scope: "Instalación de pisos, cerámica, piedra y otros revestimientos."
+      accessed: 2026-10-17
+    - id: bls_roofers
+      url: "https://www.bls.gov/ooh/construction-and-extraction/roofers.htm"
+      scope: "Instalación y reparación de cubiertas."
+      accessed: 2026-10-17
+    - id: bls_welders
+      url: "https://www.bls.gov/ooh/production/welders-cutters-solderers-and-brazers.htm"
+      scope: "Unión, reparación y corte de metal."
+      accessed: 2026-10-17
+    - id: bls_hvac
+      url: "https://www.bls.gov/ooh/installation-maintenance-and-repair/heating-air-conditioning-and-refrigeration-mechanics-and-installers.htm"
+      scope: "Instalación, mantenimiento y reparación de calefacción, climatización y refrigeración."
+      accessed: 2026-10-17
+    - id: bls_grounds_maintenance
+      url: "https://www.bls.gov/ooh/building-and-grounds-cleaning/grounds-maintenance-workers.htm"
+      scope: "Mantenimiento de espacios verdes y vegetación."
+      accessed: 2026-10-17
+    - id: bls_general_maintenance
+      url: "https://www.bls.gov/ooh/installation-maintenance-and-repair/general-maintenance-and-repair-workers.htm"
+      scope: "Reparaciones generales que no requieren el trabajo especializado de otros oficios."
+      accessed: 2026-10-17
+    - id: bls_appliance_repair
+      url: "https://www.bls.gov/oes/2023/may/oes499031.htm"
+      scope: "Definición ocupacional de reparación de electrodomésticos."
+      accessed: 2026-10-17

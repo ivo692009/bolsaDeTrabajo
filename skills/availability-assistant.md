@@ -5,6 +5,7 @@ Responder consultas frecuentes y encontrar profesionales por categoría, tarea y
 
 ## Acciones
 - Identificar rubro y tipo de trabajo buscando nombres, descripciones y alias configurados en el catálogo XML; pedir aclaración si solo se indicó el rubro o hay ambigüedad.
+- Si el cliente necesita orientación para identificar el oficio, consultar selectivamente `data/dictionaries/professional-activities.yaml` mediante `professional-activity-dictionary-lookup.md`; el diccionario no reemplaza la coincidencia exacta con el catálogo para buscar profesionales.
 - Atender la búsqueda como Cliente incluso si el número remitente también está vinculado a un perfil profesional.
 - Exigir coincidencia exacta de rubro y tipo de trabajo declarado por el profesional.
 - Mostrar solo perfiles publicados (`status=active`), disponibles (`availabilityStatus=active`), con la tarea declarada, zona de servicio activa y al menos un horario válido.

@@ -16,6 +16,14 @@ Registrar de forma auditable los trabajos acordados que no se completaron, deter
 4. Solo `attributable_to_professional` cuenta como caso de incumplimiento. Una decisión inconclusa no se cuenta ni se convierte automáticamente en suspensión.
 5. Mantener la revisión de confiabilidad separada del cierre de comisión: si Cliente y Profesional no confirman explícitamente que el trabajo se completó, no se cobra comisión, incluso si la revisión atribuye el incumplimiento al Profesional.
 
+## Patrón de cancelaciones tras una derivación
+- Registrar por solicitud si la oportunidad fue rechazada antes de aceptación, aceptada y cancelada antes de un acuerdo, o cancelada después de que ambas partes confirmaron alcance, subtotal y duración. Guardar fechas, actor, motivo declarado y estado de respuesta; no guardar datos personales innecesarios ni inferir un motivo.
+- Tres o más cancelaciones por el Profesional sin motivo informado en solicitudes distintas dentro de una ventana móvil de 60 días generan una alerta para revisión, no una conclusión de fraude ni una sanción automática. Excluir duplicados, cancelaciones iniciadas por el Cliente y rechazos previos a la aceptación.
+- Pedir al Profesional una explicación neutral y permitirle aportar contexto. Un revisor autenticado con rol `professional_reliability_admin` debe considerar ambas versiones, el historial de eventos y posibles circunstancias fuera del control del Profesional; registrar decisión, evidencia pertinente, motivo, revisor y fecha.
+- Si el patrón se confirma, el revisor puede decidir y registrar una pausa temporal de nuevas derivaciones, con alcance y vencimiento definidos, y notificar al Profesional el motivo y cómo solicitar revisión. No cancelar trabajos ya aceptados.
+- Mantener esta alerta separada de los casos de incumplimiento de trabajos acordados: únicamente estos últimos, con acuerdo bilateral de alcance, subtotal y duración y atribución administrativa, cuentan para los umbrales de suspensión existentes.
+- No mostrar a clientes acusaciones, puntajes ni historial individual. Al cliente afectado se le informa el estado de su solicitud y se le ofrecen alternativas sin exponer datos internos del Profesional.
+
 ## Regla de suspensión
 1. Contar casos confirmados, atribuibles al Profesional y aún no asociados a una sanción dentro de la ventana móvil de los últimos 60 días.
 2. Al llegar a tres casos elegibles, crear una única suspensión de 60 días. Asociar esos casos a la suspensión para que no vuelvan a dispararla mientras continúan dentro de la ventana.
@@ -33,6 +41,7 @@ Registrar de forma auditable los trabajos acordados que no se completaron, deter
 
 ## Restricciones
 - El Bot no determina responsabilidad ni aplica sanciones a partir de lenguaje natural, una acusación unilateral o falta de respuesta.
+- Las cancelaciones reiteradas sin motivo son una señal para revisión humana; el bot no declara fraude, no bloquea automáticamente al Profesional ni transforma esa señal en casos computables de incumplimiento.
 - El Profesional no puede borrar ni modificar casos o sanciones desde su autogestión.
 - Un administrador no puede alterar un acuerdo de trabajo ni marcarlo como completado para habilitar una comisión.
 - La pausa voluntaria (`availabilityStatus=inactive`) es independiente de los estados disciplinarios `suspended`, `deactivated` y `permanently_deactivated`.

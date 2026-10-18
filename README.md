@@ -10,6 +10,7 @@ Proyecto inicial para conectar por WhatsApp a clientes con profesionales de Raws
 | `config/business/` | Reglas estructuradas y contexto editable del chatbot. |
 | `config/whatsapp-bot.env.example` | Nombres de variables de entorno sin secretos. |
 | `data/catalog/` | Catálogo estático de rubros y trabajos. |
+| `data/dictionaries/` | Definiciones compactas y ampliables de actividades por oficio. |
 | `data/policies/` | Política de zonas y límites geográficos. |
 | `data/templates/` | Plantillas XML para configuración y registros runtime. |
 | `runtime/` | Perfiles, solicitudes, eventos, conversaciones y respaldos locales; excluido de Git. |

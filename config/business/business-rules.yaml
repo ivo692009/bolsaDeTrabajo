@@ -125,9 +125,9 @@ roles:
   commission_admin:
     can: ["read_private_commission_proof", "accept_or_reject_commission_proof", "confirm_payment_by_manual_review", "review_phone_change", "review_information_removal", "approve_or_reject_professional_data_deletion", "record_review_decision"]
   professional_reliability_admin:
-    can: ["review_non_completion_case", "attribute_or_clear_professional_fault", "apply_or_reactivate_professional_suspension", "record_reliability_decision"]
+    can: ["review_non_completion_case", "attribute_or_clear_professional_fault", "review_professional_onboarding_linkage", "review_suspected_fraud_case", "apply_or_reactivate_professional_suspension", "apply_temporary_referral_pause", "record_reliability_decision"]
   catalog_manager:
-    can: ["add_service_category", "edit_service_category", "deactivate_service_category", "add_job_type"]
+    can: ["add_service_category", "edit_service_category", "deactivate_service_category", "add_job_type", "review_prohibited_service_policy_updates"]
 
 professional_identity:
   identifier_source: "inbound_whatsapp_sender_number"
@@ -138,6 +138,23 @@ professional_identity:
   internal_xml_id: "reference_only_not_authentication"
   phone_change_requires: "authorized_review_and_new_number_verification"
   role_resolution: "per_message_intent"
+  duplicate_and_deactivation_screening:
+    exact_verified_phone_match_blocks_duplicate_profile: true
+    deactivated_profile_cannot_self_reactivate_or_reenroll: true
+    different_phone_is_not_proof_of_different_person_or_evasion: true
+    identity_linkage_requires_human_review: true
+    similarity_signals_are_not_sufficient_for_automatic_denial: true
+    preserve_identifiable_tombstone_only_if_retention_policy_authorizes: true
+    implementation_status: "specified_not_implemented"
+
+professional_fraud_review:
+  case_review_role: "professional_reliability_admin"
+  decision_values: ["substantiated", "not_substantiated", "inconclusive"]
+  allegation_alone_proves_fraud: false
+  automatic_profile_deactivation: false
+  temporary_referral_pause_requires: "human_decision_with_reason_and_expiry"
+  privacy_minimization_required: true
+  implementation_status: "specified_not_implemented"
 
 professional_crew:
   additional_workers_field: "crew.additionalWorkers"
@@ -585,6 +602,33 @@ business_rules:
     when: "Un remitente envia BAJA o una comunicacion automatica se intenta dirigir a un remitente con preferencia opted_out."
     then: "Registrar la preferencia opted_out con HMAC-SHA256 de E.164 en runtime/data/messaging-preferences.xml; no responder al comando BAJA ni procesar otros intents del remitente. Bloquear respuestas, avisos y mensajes de otros flujos hasta ACEPTO MENSAJES; el reconsentimiento elimina el registro HMAC y permite reanudar mensajes."
     exceptions: []
+    status: "draft"
+
+  - id: "BR-042"
+    title: "Revision de cancelaciones reiteradas sin motivo tras derivacion"
+    description: "Tres cancelaciones sin motivo informado por un Profesional en solicitudes distintas dentro de 60 dias generan una alerta de revision, no una declaracion automatica de fraude."
+    priority: "critical"
+    when: "Un Profesional acepta una derivacion y luego cancela, o cancela una solicitud que ya habia aceptado."
+    then: "Registrar actor, etapa, fecha y motivo declarado; excluir rechazos previos a la aceptacion, duplicados y cancelaciones del Cliente. Al alcanzar tres casos en 60 dias, solicitar contexto al Profesional y derivar a professional_reliability_admin. Solo una decision humana motivada puede aplicar una pausa temporal de nuevas derivaciones con vencimiento registrado y mecanismo de revision. No contar cancelaciones anteriores al acuerdo como incumplimientos computables ni cancelar trabajos ya aceptados automaticamente."
+    exceptions: ["Un motivo justificado o circunstancias fuera del control del Profesional deben ser evaluados por la persona revisora."]
+    status: "draft"
+
+  - id: "BR-043"
+    title: "Revision de altas vinculadas a perfiles desactivados y posibles estafas"
+    description: "Una coincidencia de teléfono verificado evita duplicados; indicios de que otro número intenta eludir una desactivación requieren revisión humana y no bastan por sí solos para denegar un alta."
+    priority: "critical"
+    when: "Se solicita un alta profesional con un número ya vinculado a un perfil restringido o existen indicios concretos de vinculación con uno previo; o se recibe un reporte específico de posible estafa."
+    then: "No permitir autorreactivación ni un segundo perfil con el mismo número. Para un número distinto, recopilar solo señales pertinentes y poner el alta en revisión sin revelar datos del perfil previo; una persona autenticada con rol professional_reliability_admin decide y registra hechos, motivo y fecha. Los reportes de posible estafa se tratan como alegaciones hasta corroborarse; solo una decisión humana puede establecer resultado y, ante riesgo concreto, pausar temporalmente nuevas derivaciones con alcance y vencimiento. No imponer sanciones automáticas ni afirmar que una denuncia demuestra fraude."
+    exceptions: ["No conservar tombstones identificables tras borrado aprobado salvo que una política de retención aplicable lo autorice expresamente."]
+    status: "draft"
+
+  - id: "BR-044"
+    title: "No publicar servicios ilegales o dañinos"
+    description: "Las tareas cuyo objeto claro sea facilitar delitos, explotación o daño grave no pueden incluirse en perfiles profesionales."
+    priority: "critical"
+    when: "Se crea o modifica un perfil, categoría, tipo de trabajo, alias o descripción de un servicio."
+    then: "Evaluar el propósito de la tarea con professional-prohibited-services-review.md. Rechazar la publicación de coincidencias claras, incluyendo servicios ilícitos de drogas, explotación sexual/trata, tráfico de armas, violencia, contrabando, fraude y facilitación de otros delitos. Solicitar aclaración y revisión humana ante ambigüedad; no rechazar por una palabra aislada cuando exista un contexto lícito ni bloquear servicios permitidos separables. Registrar cambios incrementales de criterios con motivo y fecha."
+    exceptions: ["Usos lícitos de salud, asistencia, educación, prevención, seguridad autorizada y actividades reguladas deben evaluarse por su propósito, sin bloqueo por palabras aisladas."]
     status: "draft"
 
 metadata:

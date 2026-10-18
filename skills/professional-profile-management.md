@@ -8,6 +8,9 @@ Permitir que un profesional administre su información y los trabajos que ofrece
 2. Autorizar cambios solo si existe exactamente un perfil activo vinculado a ese número. El nombre, redes sociales, ID interno u otros datos del mensaje no sirven para autenticarse.
 3. Si no hay coincidencia, no revelar perfiles ni aceptar cambios; ofrecer el flujo de alta o atender la solicitud como cliente según la intención.
 4. Si hay más de una coincidencia, detener la operación y derivar a revisión; nunca elegir un perfil arbitrariamente.
+5. Antes de iniciar un alta nueva, aplicar `professional-onboarding-and-fraud-review.md`: un perfil restringido no puede autorreactivarse ni volver a registrarse con el mismo número; un número diferente con indicios de vinculación requiere revisión humana, no rechazo automático.
+6. Antes de crear o publicar un perfil, y al cambiar sus rubros, trabajos, alias o descripciones, aplicar `professional-prohibited-services-review.md`. No publicar tareas claramente prohibidas; detener y derivar las ambiguas, permitiendo que servicios legítimos separables continúen.
+7. Al ingresar actividades nuevas en un alta, aplicar `professional-registration-activity-enrichment.md`; reutilizar la definición existente o enriquecer el diccionario con fuentes verificables, sin convertir la autodeclaración en una credencial verificada.
 
 ## Información que puede administrar
 - Consultar y modificar sus propios datos descriptivos y redes sociales.
